@@ -4,10 +4,11 @@ import supermarkets.ah as ah
 # import supermarkets.deka as deka
 # import supermarkets.dirk as dirk
 # import supermarkets.janlinders as janlinders
-# import supermarkets.jumbo as jumbo
+import supermarkets.jumbo as jumbo
 
 def test():
 	print("Runner")
 
 def run():
 	ah.fetch()
+	jumbo.fetch()

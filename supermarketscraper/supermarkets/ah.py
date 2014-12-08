@@ -1,16 +1,14 @@
 import bs4
 import requests
 import json
+import time
 
 import util.database as database
 collection = database.collection
 
-def test():
-    #will define test here
-    print("AH test")
-
 def fetch():
     print("# Fetching AH discounts...")
+    start_time = time.time() * 1000
     
     index_url = 'http://www.ah.nl/bonus'
 
@@ -27,6 +25,7 @@ def fetch():
     for bonus in bonus_products:
         superdata = {}
         superdata['supermarket'] = 'ah'
+
         try:
             superdata['url'] = "http://www.ah.nl" + bonus.select('div.detail a')[0].get('href')
         except:
@@ -36,16 +35,12 @@ def fetch():
         except:
             pass
         superdata['productname'] = bonus.select('div.detail h2')[0].get_text().strip()
-
         superdata['duration'] = soup.select('div.columns p.header-bar__term')[0].get_text()
-
         superdata['image'] = bonus.select('div.image img')[0].get('data-original')
-
         try:
             superdata['amount'] = bonus.select('div.image p.unit')[0].get_text().strip()
         except:
             superdata['amount'] = "Unknown"
-
         superdata['bonus'] = bonus.select('div.shield')[0].get_text().strip()
         superdata['action_price'] = bonus.select('p.price ins')[0].get_text()
         try:
@@ -54,10 +49,11 @@ def fetch():
             superdata['old_price'] = "Unknown"
 
         count = count + 1
-        #print(superdata)
         collection.insert(superdata)
 
-    print("# Done fetching %d AH discounts.\n" % count)
-    # with open('ah.json', 'w') as outfile:
-    #     json.dump(output, outfile)
-    #print output
+    seconds = (time.time() * 1000) - start_time
+    print("# Done fetching {0} AH discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+
+def test():
+    #will define test here
+    print("AH test")
