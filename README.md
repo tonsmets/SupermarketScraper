@@ -7,6 +7,15 @@ Since big data and data gathering are words you hear quite often, I started look
 
 This is still a work in progress.
 
+## Current supported supermarkets:
+- [x] Albert Heijn
+- [ ] C1000
+- [ ] Coop
+- [ ] Deka
+- [ ] Dirk
+- [ ] Jan Linders
+- [x] Jumbo (sort of)
+
 ## MANUAL
 In order to run this script you need to have some dependencies installed:
 * Python3
