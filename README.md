@@ -7,6 +7,14 @@ Since big data and data gathering are words you hear quite often, I started look
 
 This is still a work in progress.
 
+## MANUAL
+In order to run this script you need to have some dependencies installed:
+* Python3
+* pip3 (to make installing the dependencies easier)
+* BeautifulSoup4
+* Requests
+* PyMongo
+
 ## TODO
 - [ ] Make main file to run the scraper and scrape all supermarkets
 - [ ] Define better project structure
