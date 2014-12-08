@@ -15,4 +15,4 @@ This is still a work in progress.
 - [ ] Add database support and define a model to store all data in
 
 ## OPTIONAL
-- [ ] Add web interface to view al results
+- [ ] Add web interface to view all results
