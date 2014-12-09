@@ -5,7 +5,7 @@ Python project for scraping Dutch supermarkets
 
 Since big data and data gathering are words you hear quite often, I started looking into gathering data that I thought was interesting.
 
-This is still a work in progress.
+This is still a work in progress. The code you find today could be gone or heavily modified by tomorrow!
 
 ## Current supported supermarkets:
 - [x] Albert Heijn
