@@ -2,21 +2,19 @@ import bs4
 import requests
 import json
 import time
+from util.logging import *
+import util.settings as settings
+import models.model as models
 
-import util.database as database
-collection = database.collection
+import util.database as db
 
 def fetch():
-    print("# Fetching AH discounts...")
+    LogI("Fetching AH discounts...")
     start_time = time.time() * 1000
     
     index_url = 'http://www.ah.nl/bonus'
 
-    headers = {
-        'User-Agent':'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-    }
-
-    r = requests.get(index_url, headers=headers)
+    r = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(r.text, 'html5lib')
 
     count = 0
@@ -24,6 +22,9 @@ def fetch():
     bonus_products = soup.findAll(attrs={'data-class': 'product'})
     for bonus in bonus_products:
         superdata = {}
+        # FIX THIS NEXT:
+        # superdata = models.defaultModel
+
         superdata['supermarket'] = 'ah'
 
         try:
@@ -49,11 +50,14 @@ def fetch():
             superdata['old_price'] = "Unknown"
 
         count = count + 1
-        collection.insert(superdata)
+        db.insert(superdata)
+
+        if settings.debugging:
+            LogD("({0}) Fetched '{1}'".format(count, superdata['productname']))
 
     seconds = (time.time() * 1000) - start_time
-    print("# Done fetching {0} AH discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+    LogI("Done fetching {0} AH discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
 
 def test():
     #will define test here
-    print("AH test")
+    LogI("AH test")

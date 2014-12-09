@@ -14,7 +14,7 @@ This is still a work in progress.
 - [ ] Deka
 - [ ] Dirk
 - [ ] Jan Linders
-- [x] Jumbo (sort of)
+- [ ] Jumbo
 
 ## MANUAL
 In order to run this script you need to have some dependencies installed:
@@ -23,13 +23,20 @@ In order to run this script you need to have some dependencies installed:
 * BeautifulSoup4
 * Requests
 * PyMongo
+* html5lib
+
+There are some settings in util/settings.py you need to edit for your needs. The defaults will probably work.
 
 ## TODO
 - [ ] Make main file to run the scraper and scrape all supermarkets
 - [ ] Define better project structure
-- [ ] Make the supermarkets into "modules"
+- [x] Make the supermarkets into "modules"
+- [ ] Add as many supermarkets as possible
 - [ ] Build tests to see if all scraping still works
 - [ ] Add database support and define a model to store all data in
+- [x] Add debugging
+- [x] Add custom logging
 
 ## OPTIONAL
 - [ ] Add web interface to view all results
+- [ ] Add support for scraping via Tor

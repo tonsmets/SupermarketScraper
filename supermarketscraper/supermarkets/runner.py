@@ -5,10 +5,12 @@ import supermarkets.ah as ah
 # import supermarkets.dirk as dirk
 # import supermarkets.janlinders as janlinders
 import supermarkets.jumbo as jumbo
+from util.logging import *
+import util.settings as settings
 
 def test():
 	print("Runner")
 
 def run():
 	ah.fetch()
-	jumbo.fetch()
+	#jumbo.fetch()

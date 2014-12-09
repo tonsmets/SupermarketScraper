@@ -1,6 +1,7 @@
 import util.settings as settings
 import supermarkets.runner as srunner
 import time
+from util.logging import *
 
 if __name__ == '__main__':
 	start_time = time.time() * 1000
@@ -9,6 +10,6 @@ if __name__ == '__main__':
 	srunner.run()
 
 	seconds = (time.time() * 1000) - start_time
-	print("#===============================================================================#")
-	print("# SCRAPER FINISHED IN {0}ms.\n".format(format(seconds, '.2f')))
+	PrintLine()
+	LogI("SCRAPER FINISHED IN {0}ms.\n".format(format(seconds, '.2f')))
 	
