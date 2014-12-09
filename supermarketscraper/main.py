@@ -2,8 +2,10 @@ import util.settings as settings
 import supermarkets.runner as srunner
 import time
 from util.logging import *
+from colorama import init
 
 if __name__ == '__main__':
+	init()
 	start_time = time.time() * 1000
 
 	settings.print_info()

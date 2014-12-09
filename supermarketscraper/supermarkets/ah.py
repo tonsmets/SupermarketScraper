@@ -22,9 +22,7 @@ def fetch():
     bonus_products = soup.findAll(attrs={'data-class': 'product'})
     for bonus in bonus_products:
         superdata = {}
-        # FIX THIS NEXT:
-        # superdata = models.defaultModel
-
+        superdata = models.defaultModel.copy()
         superdata['supermarket'] = 'ah'
 
         try:
@@ -39,15 +37,17 @@ def fetch():
         superdata['duration'] = soup.select('div.columns p.header-bar__term')[0].get_text()
         superdata['image'] = bonus.select('div.image img')[0].get('data-original')
         try:
-            superdata['amount'] = bonus.select('div.image p.unit')[0].get_text().strip()
+            tempAmount = bonus.select('div.image p.unit')[0].get_text().strip()
+            if (tempAmount != '' and tempAmount != ' '):
+                superdata['amount'] = bonus.select('div.image p.unit')[0].get_text().strip()
         except:
-            superdata['amount'] = "Unknown"
+            pass
         superdata['bonus'] = bonus.select('div.shield')[0].get_text().strip()
         superdata['action_price'] = bonus.select('p.price ins')[0].get_text()
         try:
             superdata['old_price'] = bonus.select('p.price del')[0].get_text()
         except:
-            superdata['old_price'] = "Unknown"
+            pass
 
         count = count + 1
         db.insert(superdata)
