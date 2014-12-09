@@ -1,9 +1,11 @@
 import bs4
 import requests
+import re
 import json
 import time
 from util.logging import *
 import util.settings as settings
+import models.model as models
 
 import util.database as db
 
@@ -13,8 +15,6 @@ index_url = root_url + '/Homepage/Nu-in-de-winkel/acties/'
 headers = {
     'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
 }
-
-count = 0
  
 def get_discount_page_urls():
     response = requests.get(index_url)
@@ -23,6 +23,7 @@ def get_discount_page_urls():
  
 def get_discount_data(actie_page_url):
     discount_data = {}
+    discount_data = models.defaultModel.copy()
     response = requests.get(root_url + actie_page_url, headers=headers)
     soup = bs4.BeautifulSoup(response.text)
     soup.encode('utf-8')
@@ -36,7 +37,7 @@ def get_discount_data(actie_page_url):
     try:
         discount_data['action-price'] = soup.select('div.content-box em.single-value')[0].get_text().strip().replace(",",".")   
     except:
-        discount_data['action-price'] = "Unknown"
+        pass
 
     try:
         discount_data['action-price'] = soup.select('em.discount-type-alt')[0].get_text().strip()
@@ -61,16 +62,18 @@ def get_discount_data(actie_page_url):
     try:
         discount_data['old-price'] = soup.select('div.content-box p.pricing')[0].get_text().strip().replace("Normaal ", "")
     except:
-        discount_data['old-price'] = "Unknown"
+        pass
 
     return discount_data
  
 def fetch():
-    global count
     LogI("Fetching Jumbo discounts...")
     start_time = time.time() * 1000
+
+    count = 0
+
     discount_page_urls = get_discount_page_urls()
-    for discount_page_url in actie_page_urls:
+    for discount_page_url in discount_page_urls:
         superdata = get_discount_data(discount_page_url) 
         count = count + 1
         db.insert(superdata)

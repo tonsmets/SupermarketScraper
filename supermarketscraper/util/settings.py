@@ -2,7 +2,7 @@
 Global settings for the scraper. Also defining version numbers here
 """
 # Verbose debug logging
-debugging = False
+debugging = True
 
 # Database
 mongoUrl = 'mongodb://localhost:27017/'

@@ -1,27 +1,30 @@
-import re
-import requests
 import bs4
+import requests
 import json
+import time
+from util.logging import *
+import util.settings as settings
+import models.model as models
 
-root_url = 'http://www.coop.nl'
-index_url = root_url + '/aanbiedingen'
-
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-}
+import util.database as db
  
-def get_data():
-    output = []
-    print "Coop Scraper\n"
-    print "[Productname] - [Amount] - [Action price]"
+def fetch():
+    LogI("Fetching Coop discounts...")
+    start_time = time.time() * 1000
+
+    root_url = 'http://www.coop.nl'
+    index_url = root_url + '/aanbiedingen'
     
-    response = requests.get(index_url, headers=headers)
+    response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     soup.encode('utf-8')
+
+    count = 0
 
     category_divs = soup.findAll('div', {'class':'deal'})
     for div in category_divs:
         temp_data = {}
+        temp_data = models.defaultModel.copy()
         temp_data['url'] = index_url
         temp_data['productname'] = div.find('h3').get_text()
         temp_data['duration'] = soup.select('div#ctl00_ctl00_ContentPlaceHolderMain_cpLeftAndContent_Header2_divTextLink div.periode strong')[0].get_text() + " t/m " + soup.select('div#ctl00_ctl00_ContentPlaceHolderMain_cpLeftAndContent_Header2_divTextLink div.periode strong')[1].get_text()
@@ -29,17 +32,17 @@ def get_data():
         try:
             temp_data['description'] = div.select('div.deal-info ul li')[0].get_text()
         except:
-            temp_data['description'] = "Unknown"
+            pass
 
         try:
             temp_data['amount'] = div.select('div.deal-label')[0].get_text()
         except:
-            temp_data['amount'] = "Unknown"
+            pass
 
         try:
             temp_data['action-price'] = div.select('span.deal-euros')[0].get_text()
         except:
-            temp_data['action-price'] = "Unknown"
+            pass
 
         try:
             temp = div.select('div.i50procentkorting')[0].get_text()
@@ -53,13 +56,16 @@ def get_data():
         except:
             pass
 
-        output.append(temp_data)
+        count = count + 1
+        db.insert(temp_data)
 
-        print temp_data['productname'] + " - " + temp_data['amount'] + " - " + temp_data['action-price']
+        if settings.debugging:
+            LogD("({0}) Fetched '{1}'".format(count, temp_data['productname']))
 
-    with open('coop.json', 'w') as outfile:
-        json.dump(output, outfile)
-    #print output
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} Coop discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+
  
-if __name__ == '__main__':
-    get_data()
+def test():
+    #will define test here
+    LogI("Coop test")

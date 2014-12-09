@@ -18,32 +18,39 @@
 # 264   Per doos
 # 265   Per set
 
-import re
-import requests
 import bs4
+import requests
 import json
+import time
+import re
+from util.logging import *
+import util.settings as settings
+import models.model as models
+
+import util.database as db
 
 root_url = 'http://www.dekamarkt.nl/'
 index_url = root_url + 'aanbiedingen'
- 
-output = []
 
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-}
+count = 0
  
 def get_actie_page_urls():
-    response = requests.get(index_url, headers=headers)
+    response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     urls = soup.find('div', {'class':'paging'})
-    for e in urls.findAll('a', {'class': 'last'}):
-                e.extract()
+
+    # TODO!!
+    # for e in urls.findAll('a', {'class': 'last'}):
+    #     e.extract()
+    
     return [a.attrs.get('href') for a in soup.select('a[href^=https://www.dekamarkt.nl/aanbiedingen?]')]
  
 def get_actie_data(actie_page_url):
-    response = requests.get(actie_page_url, headers=headers)
+    response = requests.get(actie_page_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     soup.encode('utf-8')
+
+    global count
 
     category_divs = soup.findAll('div', {'class':'aanbieding'})
     for div in category_divs:
@@ -59,25 +66,34 @@ def get_actie_data(actie_page_url):
         try:
             temp_data['action-price'] = div.select('span.current span.whole')[0].get_text() + div.select('span.current span.part')[0].get_text()
         except:
-            temp_data['action-price'] = "Unknown"
+            pass
 
         try:
             temp_data['old-price'] = div.select('span.old span.whole')[0].get_text() + div.select('span.old span.part')[0].get_text()
         except:
-            temp_data['old-price'] = "Unknown"
+            pass
 
-        output.append(temp_data)
+        count = count + 1
+        db.insert(temp_data)
 
-        print temp_data['productname'] + " - " + temp_data['amount'] + " - " + temp_data['action-price']
+        if settings.debugging:
+            LogD("({0}) Fetched '{1}'".format(count, temp_data['productname']))
+
+
  
-def get_data():
-    print "Deka Scraper\n"
+def fetch():
+    LogI("Fetching Deka discounts...")
+    start_time = time.time() * 1000
+
+    global count
+
     actie_page_urls = get_actie_page_urls()
     for actie_page_url in actie_page_urls:
         single_output = get_actie_data(actie_page_url)
 
-    with open('deka.json', 'w') as outfile:
-        json.dump(output, outfile)
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} Deka discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+
 
 def getAmount(tag):
     if tag == '248':
@@ -111,7 +127,8 @@ def getAmount(tag):
     elif tag == '265':
         return "Per set"
     else:
-        return "Unknown"
- 
-if __name__ == '__main__':
-    get_data()
+        pass
+
+def test():
+    #will define test here
+    LogI("Deka test")

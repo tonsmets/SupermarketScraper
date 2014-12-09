@@ -9,6 +9,10 @@ if __name__ == '__main__':
 	start_time = time.time() * 1000
 
 	settings.print_info()
+
+	if settings.debugging:
+		LogD("Debugging enabled!!\n")
+
 	srunner.run()
 
 	seconds = (time.time() * 1000) - start_time

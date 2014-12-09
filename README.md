@@ -9,11 +9,11 @@ This is still a work in progress. The code you find today could be gone or heavi
 
 ## Current supported supermarkets:
 - [x] Albert Heijn
-- [ ] C1000
-- [ ] Coop
+- [x] C1000
+- [x] Coop
 - [ ] Deka
 - [ ] Dirk
-- [ ] Jan Linders
+- [x] Jan Linders
 - [ ] Jumbo
 
 ## DEPENDENCIES
@@ -25,12 +25,13 @@ In order to run this script you need to have some dependencies installed:
 * PyMongo
 * html5lib
 * colorama
+* cssutils
 
 There are some settings in util/settings.py you need to edit for your needs. The defaults will probably work.
 
 ## TODO
-- [ ] Make main file to run the scraper and scrape all supermarkets
-- [ ] Define better project structure
+- [x] Make main file to run the scraper and scrape all supermarkets
+- [x] Define better project structure
 - [x] Make the supermarkets into "modules"
 - [ ] Add as many supermarkets as possible
 - [ ] Build tests to see if all scraping still works

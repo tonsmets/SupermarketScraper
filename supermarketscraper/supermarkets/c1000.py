@@ -1,29 +1,33 @@
-import re
-import requests
 import bs4
+import requests
+import re
 import json
+import time
+from util.logging import *
+import util.settings as settings
+import models.model as models
 
-root_url = 'http://www.c1000.nl/'
-index_url = root_url + 'aanbiedingen'
+import util.database as db
 
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-}
- 
-def get_data():
-    output = []
-    print "C1000 Scraper\n"
-    print "[Productname] - [Amount] - [Action price]"
+def fetch():
+    LogI("Fetching C1000 discounts...")
+    start_time = time.time() * 1000
+
+    root_url = 'http://www.c1000.nl/'
+    index_url = root_url + 'aanbiedingen'
     
-    response = requests.get(index_url, headers=headers)
+    response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     soup.encode('utf-8')
+
+    count = 0
 
     category_divs = soup.findAll('div', id=re.compile("^content_0_contentrij1_0_weekAanbiedingen_listViewCategorieen_"))
     for div in category_divs:
         list_items = div.findAll('li')
         for li in list_items:
             temp_data = {}
+            temp_data = models.defaultModel.copy()
             temp_data['url'] = index_url
             temp_data['productname'] = li.find('h2').get_text()
             temp_data['duration'] = re.sub(r'[\t\r\n]', '', soup.find('a', {'id' : 'content_0_contentrij1_0_linkTabHuidigeWeek'}).get_text()).strip().replace('                     ', ' ')
@@ -32,12 +36,12 @@ def get_data():
             try:
                 temp_data['amount'] = li.select('div.pricetag em')[0].get_text()
             except:
-                temp_data['amount'] = "Unknown"
+                pass
 
             try:
                 temp_data['action-price'] = li.select('div.pricetag strong')[0].get_text()
             except:
-                temp_data['action-price'] = "Unknown"
+                pass
 
             try:
                 temp_data['action-price'] = li.select('img.visual')[1].get('alt')
@@ -47,15 +51,18 @@ def get_data():
             try:
                 temp_data['old-price'] = li.select('del')[0].get_text()
             except:
-                temp_data['old-price'] = "Unknown"
+                pass
 
-            output.append(temp_data)
+            count = count + 1
+            db.insert(temp_data)
 
-            print temp_data['productname'] + " - " + temp_data['amount'] + " - " + temp_data['action-price']
+            if settings.debugging:
+                LogD("({0}) Fetched '{1}'".format(count, temp_data['productname']))
 
-    with open('c1000.json', 'w') as outfile:
-        json.dump(output, outfile)
-    #print output
- 
-if __name__ == '__main__':
-    get_data()
+    
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} C1000 discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+
+def test():
+    #will define test here
+    LogI("C1000 test")

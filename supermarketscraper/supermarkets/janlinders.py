@@ -1,21 +1,24 @@
-import re
-import requests
 import bs4
+import requests
+import re
 import json
+import time
+from util.logging import *
+import util.settings as settings
+import models.model as models
 
-root_url = 'http://www.janlinders.nl'
-index_url = root_url + '/acties/weekacties/'
-
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-}
+import util.database as db
  
-def get_data():
-    output = []
-    print "Jan Linders Scraper\n"
-    print "[Productname] - [Amount] - [Action price]"
-    
-    response = requests.get(index_url, headers=headers)
+def fetch():
+    LogI("Fetching Jan Linders discounts...")
+    start_time = time.time() * 1000
+
+    root_url = 'http://www.janlinders.nl'
+    index_url = root_url + '/acties/weekacties/'
+
+    count = 0
+
+    response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     soup.encode('utf-8')
 
@@ -56,7 +59,7 @@ def get_data():
             try:
                 temp_data['action-price'] = actdiv.select('div.action div.regular_price span.big')[0].get_text() + "." + actdiv.select('div.action div.regular_price span.small')[0].get_text()
             except:
-                temp_data['action-price'] = "Unknown"
+                pass
 
             try:
                 temp_data['action-price'] = actdiv.select('div.big')[0].get_text() + "." + actdiv.select('div.small')[1].get_text()
@@ -79,19 +82,21 @@ def get_data():
                 pass
             
             try:
-                temp_data['old-price'] = actdiv.select('span.oldprice')[0].get_text()
+                tempAmount = actdiv.select('span.oldprice')[0].get_text()
+                if (tempAmount != '' and tempAmount != ' '):
+                    temp_data['old-price'] = actdiv.select('span.oldprice')[0].get_text()
             except:
-                temp_data['old-price'] = "Unknown"
+                pass
 
-            if temp_data['old-price'] == "":
-                temp_data['old-price'] = "Unknown"
+            count = count + 1
+            db.insert(temp_data)
 
-            output.append(temp_data)
-            print temp_data['productname'] + " - " + temp_data['amount'] + " - " + temp_data['action-price']
+            if settings.debugging:
+                LogD("({0}) Fetched '{1}'".format(count, temp_data['productname']))
 
-    with open('janlinders.json', 'w') as outfile:
-        json.dump(output, outfile)
-    #print output
- 
-if __name__ == '__main__':
-    get_data()
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} Jan Linders discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+
+def test():
+    #will define test here
+    LogI("Jan Linders test")

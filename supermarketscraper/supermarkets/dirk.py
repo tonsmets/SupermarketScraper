@@ -1,25 +1,27 @@
-import re
-import requests
 import bs4
+import requests
 import json
+import time
 import cssutils
+from util.logging import *
+import util.settings as settings
+import models.model as models
+
+import util.database as db
 
 root_url = 'http://www.dirk.nl/'
 index_url = root_url + 'aanbiedingen'
-
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-}
  
 def get_actie_page_urls():
-    response = requests.get(index_url, headers=headers)
+    response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     return [a.attrs.get('href') for a in soup.select('div.rightside div.body p a[href^=aanbiedingen/]')]
 
  
 def get_actie_data(actie_page_url):
     actie_data = {}
-    response = requests.get(root_url + actie_page_url, headers=headers)
+    actie_data = models.defaultModel.copy()
+    response = requests.get(root_url + actie_page_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     actie_data['url'] = root_url + actie_page_url
     actie_data['productname'] = soup.find('h2').get_text()
@@ -35,26 +37,34 @@ def get_actie_data(actie_page_url):
     try:
         actie_data['action-price'] = soup.select('div.star')[0].get('title').strip().replace(u"\u20AC ","").replace(",",".")
     except:
-        actie_data['action-price'] = "Unknown"
+        pass
 
     try:
         actie_data['old-price'] = soup.select('span.stripe')[0].get_text()
     except:
-        actie_data['old-price'] = "Unknown"
+        pass
 
     return actie_data
  
-def get_data():
-    output = []
-    print "Dirk Scraper\n"
-    actie_page_urls = get_actie_page_urls()
+def fetch():
+    LogI("Fetching Dirk discounts...")
+    start_time = time.time() * 1000
 
+    count = 0
+
+    actie_page_urls = get_actie_page_urls()
     for actie_page_url in actie_page_urls:
         single_output = get_actie_data(actie_page_url)
-        output.append(single_output)
-        print single_output['productname'] + " - " + single_output['amount'] + " - " + single_output['action-price']
-    with open('dirk.json', 'w') as outfile:
-        json.dump(output, outfile)
- 
-if __name__ == '__main__':
-    get_data()
+        
+        count = count + 1
+        db.insert(single_output)
+
+        if settings.debugging:
+            LogD("({0}) Fetched '{1}'".format(count, single_output['productname']))
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} Dirk discounts in {1}ms.\n".format(count, format(seconds, '.2f')))    
+
+def test():
+    #will define test here
+    LogI("Dirk test")
