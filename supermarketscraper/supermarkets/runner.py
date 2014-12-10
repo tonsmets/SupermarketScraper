@@ -17,6 +17,6 @@ def run():
 	c1000.fetch()
 	coop.fetch()
 	deka.fetch()
-	dirk.fetch() # Problematic on some urls
+	dirk.fetch()
 	janlinders.fetch()
 	jumbo.fetch()
