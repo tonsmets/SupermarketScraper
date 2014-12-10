@@ -31,7 +31,7 @@ def fetch():
         temp_data['duration'] = soup.select('div#ctl00_ctl00_ContentPlaceHolderMain_cpLeftAndContent_Header2_divTextLink div.periode strong')[0].get_text() + " t/m " + soup.select('div#ctl00_ctl00_ContentPlaceHolderMain_cpLeftAndContent_Header2_divTextLink div.periode strong')[1].get_text()
         temp_data['image'] = root_url + div.find('img').get('src')
         try:
-            temp_data['description'] = div.select('div.deal-info ul li')[0].get_text()
+            temp_data['amount'] = div.select('div.deal-info ul li')[0].get_text()
         except:
             pass
 

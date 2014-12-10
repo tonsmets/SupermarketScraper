@@ -64,7 +64,7 @@ def get_actie_data(actie_page_url):
         temp_data['supermarket'] = 'deka'
         temp_data['url'] = actie_page_url
         temp_data['productname'] = div.find('h2').get_text()
-        #temp_data['duration'] = re.sub(r'[\t\r\n]', '', soup.find('a', {'id' : 'content_0_contentrij1_0_linkTabHuidigeWeek'}).get_text()).strip().replace('                     ', ' ')
+        temp_data['duration'] = duration
         temp_data['description'] = div.select('div.text')[0].get_text()
         temp_data['image'] = root_url + div.find('img').get('src')
         temp_data['duration'] = duration

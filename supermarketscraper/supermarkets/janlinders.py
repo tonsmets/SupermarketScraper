@@ -28,6 +28,7 @@ def fetch():
         div_items = div.findAll('div', { 'class' : 'hover_discount_product'})
         for actdiv in div_items:
             temp_data = {}
+            temp_data = models.defaultModel.copy()
             temp_data['supermarket'] = 'janlinders'
             temp_data['url'] = index_url
             try:
@@ -58,34 +59,34 @@ def fetch():
             temp_data['image'] = root_url + actdiv.find('img').get('src')
 
             try:
-                temp_data['action-price'] = actdiv.select('div.action div.regular_price span.big')[0].get_text() + "." + actdiv.select('div.action div.regular_price span.small')[0].get_text()
+                temp_data['action_price'] = actdiv.select('div.action div.regular_price span.big')[0].get_text() + "." + actdiv.select('div.action div.regular_price span.small')[0].get_text()
             except:
                 pass
 
             try:
-                temp_data['action-price'] = actdiv.select('div.big')[0].get_text() + "." + actdiv.select('div.small')[1].get_text()
+                temp_data['action_price'] = actdiv.select('div.big')[0].get_text() + "." + actdiv.select('div.small')[1].get_text()
             except:
                 pass
 
             try:
-                temp_data['action-price'] = actdiv.select('div.regular_price div.big')[0].get_text() + "." + actdiv.select('div.regular_price div.small')[0].get_text()
+                temp_data['action_price'] = actdiv.select('div.regular_price div.big')[0].get_text() + "." + actdiv.select('div.regular_price div.small')[0].get_text()
             except:
                 pass
 
             try:
-                temp_data['action-price'] = actdiv.select('div.price div.big')[0].get_text() + "." + actdiv.select('div.price div.small')[0].get_text()
+                temp_data['action_price'] = actdiv.select('div.price div.big')[0].get_text() + "." + actdiv.select('div.price div.small')[0].get_text()
             except:
                 pass
 
             try:
-                temp_data['action-price'] = actdiv.select('div.action div.x_discount div.big')[0].get_text() + " " + actdiv.select('div.action div.x_discount div.small')[0].get_text()
+                temp_data['action_price'] = actdiv.select('div.action div.x_discount div.big')[0].get_text() + " " + actdiv.select('div.action div.x_discount div.small')[0].get_text()
             except:
                 pass
             
             try:
                 tempAmount = actdiv.select('span.oldprice')[0].get_text()
                 if (tempAmount != '' and tempAmount != ' '):
-                    temp_data['old-price'] = actdiv.select('span.oldprice')[0].get_text()
+                    temp_data['old_price'] = actdiv.select('span.oldprice')[0].get_text()
             except:
                 pass
 

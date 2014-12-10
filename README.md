@@ -3,7 +3,7 @@ SupermarketScraper
 
 Python project for scraping Dutch supermarkets
 
-The idea behind this piece of code is to run it on set intervals (cron jobs) to collect the data. Before running (1 day before, or just a couple of hours), it should run tests to see if everything is still working (it is always possible that a website is changed). If something is broken, it should give you enough time to fix the problem before the cron job wil start the scraping proces.
+The idea behind this piece of code is to run it on set intervals (cron jobs) to collect the data. Before running (1 day before, or just a couple of hours), it should run tests to see if everything is still working (it is always possible that a website has changed). If something is broken, it should give you enough time to fix the problem before the cron job wil start the scraping proces.
 
 In the second phase of this project I would like to add some postprocessing for the data. Things like downloading images, storing them and deleting old ones. It should als store some extra data about each run of the scraper to prevent me from drowning in endless data without knowing when it was scraped :P.
 

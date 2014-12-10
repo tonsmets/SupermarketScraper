@@ -17,5 +17,5 @@ if __name__ == '__main__':
 
 	seconds = (time.time() * 1000) - start_time
 	PrintLine()
-	LogI("SCRAPER FINISHED IN {0}ms.\n".format(format(seconds, '.2f')))
+	LogI("Scraper finished in {0}ms.\n".format(format(seconds, '.2f')))
 	

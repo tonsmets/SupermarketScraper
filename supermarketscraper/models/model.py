@@ -12,6 +12,7 @@ defaultModel['duration'] = 'Unknown'
 defaultModel['amount'] = 'Unknown'
 defaultModel['action_price'] = 'Unknown'
 defaultModel['old_price'] = 'Unknown'
+defaultModel['description'] = 'Unknown'
 
 # Supermarket specific
 defaultModel['bonus'] = 'N/A'
