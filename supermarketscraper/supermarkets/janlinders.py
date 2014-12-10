@@ -28,6 +28,7 @@ def fetch():
         div_items = div.findAll('div', { 'class' : 'hover_discount_product'})
         for actdiv in div_items:
             temp_data = {}
+            temp_data['supermarket'] = 'janlinders'
             temp_data['url'] = index_url
             try:
                 temp_data['productname'] = actdiv.select('div.action b')[0].get_text() + " "

@@ -9,7 +9,7 @@ import models.model as models
 
 import util.database as db
 
-root_url = 'http://www.dirk.nl/'
+root_url = 'https://www.dirk.nl/'
 index_url = root_url + 'aanbiedingen'
  
 def get_actie_page_urls():
@@ -17,12 +17,17 @@ def get_actie_page_urls():
     soup = bs4.BeautifulSoup(response.text)
     return [a.attrs.get('href') for a in soup.select('div.rightside div.body p a[href^=aanbiedingen/]')]
 
- 
 def get_actie_data(actie_page_url):
     actie_data = {}
     actie_data = models.defaultModel.copy()
-    response = requests.get(root_url + actie_page_url, headers=settings.headers)
+    actie_data['supermarket'] = 'dirk'
+    url = root_url + actie_page_url
+    url = url.replace("é","e")
+    response = requests.get(url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
+    soup.encode('utf-8')
+    print(url)
+    print(soup)
     actie_data['url'] = root_url + actie_page_url
     actie_data['productname'] = soup.find('h2').get_text()
     actie_data['duration'] = soup.select('div.fromTill')[0].get_text().strip()
@@ -35,12 +40,12 @@ def get_actie_data(actie_page_url):
     actie_data['image'] = root_url + url
 
     try:
-        actie_data['action-price'] = soup.select('div.star')[0].get('title').strip().replace(u"\u20AC ","").replace(",",".")
+        actie_data['action_price'] = soup.select('div.star')[0].get('title').strip().replace(u"\u20AC ","").replace(",",".")
     except:
         pass
 
     try:
-        actie_data['old-price'] = soup.select('span.stripe')[0].get_text()
+        actie_data['old_price'] = soup.select('span.stripe')[0].get_text()
     except:
         pass
 

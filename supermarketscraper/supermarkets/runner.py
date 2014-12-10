@@ -16,7 +16,7 @@ def run():
 	ah.fetch()
 	c1000.fetch()
 	coop.fetch()
-	deka.fetch() # Need to fix some here
-	#dirk.fetch() # Problematic on productname
+	deka.fetch()
+	#dirk.fetch() # Problematic on some urls
 	janlinders.fetch()
-	jumbo.fetch() # Need to fix scraping
+	jumbo.fetch()

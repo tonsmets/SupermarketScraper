@@ -25,6 +25,7 @@ def fetch():
     for div in category_divs:
         temp_data = {}
         temp_data = models.defaultModel.copy()
+        temp_data['supermarket'] = 'coop'
         temp_data['url'] = index_url
         temp_data['productname'] = div.find('h3').get_text()
         temp_data['duration'] = soup.select('div#ctl00_ctl00_ContentPlaceHolderMain_cpLeftAndContent_Header2_divTextLink div.periode strong')[0].get_text() + " t/m " + soup.select('div#ctl00_ctl00_ContentPlaceHolderMain_cpLeftAndContent_Header2_divTextLink div.periode strong')[1].get_text()
@@ -40,19 +41,19 @@ def fetch():
             pass
 
         try:
-            temp_data['action-price'] = div.select('span.deal-euros')[0].get_text()
+            temp_data['action_price'] = div.select('span.deal-euros')[0].get_text()
         except:
             pass
 
         try:
             temp = div.select('div.i50procentkorting')[0].get_text()
-            temp_data['action-price'] = "50% korting"
+            temp_data['action_price'] = "50% korting"
         except:
             pass
 
         try:
             temp = div.select('div.i25procentkorting')[0].get_text()
-            temp_data['action-price'] = "25% korting"
+            temp_data['action_price'] = "25% korting"
         except:
             pass
 

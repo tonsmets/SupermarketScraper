@@ -11,10 +11,10 @@ This is still a work in progress. The code you find today could be gone or heavi
 - [x] Albert Heijn
 - [x] C1000
 - [x] Coop
-- [ ] Deka
+- [x] Deka
 - [ ] Dirk
 - [x] Jan Linders
-- [ ] Jumbo
+- [x] Jumbo
 
 ## DEPENDENCIES
 In order to run this script you need to have some dependencies installed:
@@ -38,6 +38,7 @@ There are some settings in util/settings.py you need to edit for your needs. The
 - [x] Add database support and define a model to store all data in
 - [x] Add debugging
 - [x] Add custom logging (with colors)
+- [ ] Add error handling
 
 ## OPTIONAL
 - [ ] Add web interface to view all results

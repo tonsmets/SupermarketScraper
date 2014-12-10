@@ -33,15 +33,19 @@ root_url = 'http://www.dekamarkt.nl/'
 index_url = root_url + 'aanbiedingen'
 
 count = 0
+
+duration = ""
  
 def get_actie_page_urls():
+    global duration
     response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     urls = soup.find('div', {'class':'paging'})
 
-    # TODO!!
-    # for e in urls.findAll('a', {'class': 'last'}):
-    #     e.extract()
+    for e in urls.findAll('a', {'class': 'last'}):
+        e.extract()
+
+    duration = soup.select('div.aanbiedingenData')[0].get_text().replace("Aanbieding geldig van ","")
     
     return [a.attrs.get('href') for a in soup.select('a[href^=https://www.dekamarkt.nl/aanbiedingen?]')]
  
@@ -51,25 +55,28 @@ def get_actie_data(actie_page_url):
     soup.encode('utf-8')
 
     global count
+    global duration
 
     category_divs = soup.findAll('div', {'class':'aanbieding'})
     for div in category_divs:
         temp_data = {}
+        temp_data = models.defaultModel.copy()
+        temp_data['supermarket'] = 'deka'
         temp_data['url'] = actie_page_url
         temp_data['productname'] = div.find('h2').get_text()
         #temp_data['duration'] = re.sub(r'[\t\r\n]', '', soup.find('a', {'id' : 'content_0_contentrij1_0_linkTabHuidigeWeek'}).get_text()).strip().replace('                     ', ' ')
         temp_data['description'] = div.select('div.text')[0].get_text()
         temp_data['image'] = root_url + div.find('img').get('src')
-
+        temp_data['duration'] = duration
         temp_data['amount'] = getAmount(div.find('div', {'class' : re.compile("tag")}).get('class')[1].replace('tag', ''))
         
         try:
-            temp_data['action-price'] = div.select('span.current span.whole')[0].get_text() + div.select('span.current span.part')[0].get_text()
+            temp_data['action_price'] = div.select('span.current span.whole')[0].get_text() + div.select('span.current span.part')[0].get_text()
         except:
             pass
 
         try:
-            temp_data['old-price'] = div.select('span.old span.whole')[0].get_text() + div.select('span.old span.part')[0].get_text()
+            temp_data['old_price'] = div.select('span.old span.whole')[0].get_text() + div.select('span.old span.part')[0].get_text()
         except:
             pass
 

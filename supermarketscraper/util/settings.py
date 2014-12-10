@@ -2,7 +2,7 @@
 Global settings for the scraper. Also defining version numbers here
 """
 # Verbose debug logging
-debugging = True
+debugging = False
 
 # Database
 mongoUrl = 'mongodb://localhost:27017/'
@@ -17,11 +17,11 @@ headers = {
 """
 Applications specific static data
 """
-version = '1.0.1'
+version = '1.0.2'
 url = 'https://github.com/tonsmets/SupermarketScraper'
 
 def print_info():
-	print("#===============================================================================#")
+	print("# =============================================================================== #")
 	print("#     __                            __                                      ")
 	print("#    / _\ _   _  _ __    ___  _ __ / _\  ___  _ __  __ _  _ __    ___  _ __ ")
 	print("#    \ \ | | | || '_ \  / _ \| '__|\ \  / __|| '__|/ _` || '_ \  / _ \| '__|")
@@ -30,4 +30,4 @@ def print_info():
 	print("#               |_|                                      |_|                ")
 	print("#   URL:", url)
 	print("#   VERSION:", version)
-	print("#===============================================================================#\n")
+	print("# =============================================================================== #\n")

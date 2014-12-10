@@ -28,6 +28,7 @@ def fetch():
         for li in list_items:
             temp_data = {}
             temp_data = models.defaultModel.copy()
+            temp_data['supermarket'] = 'c1000'
             temp_data['url'] = index_url
             temp_data['productname'] = li.find('h2').get_text()
             temp_data['duration'] = re.sub(r'[\t\r\n]', '', soup.find('a', {'id' : 'content_0_contentrij1_0_linkTabHuidigeWeek'}).get_text()).strip().replace('                     ', ' ')
@@ -39,17 +40,17 @@ def fetch():
                 pass
 
             try:
-                temp_data['action-price'] = li.select('div.pricetag strong')[0].get_text()
+                temp_data['action_price'] = li.select('div.pricetag strong')[0].get_text()
             except:
                 pass
 
             try:
-                temp_data['action-price'] = li.select('img.visual')[1].get('alt')
+                temp_data['action_price'] = li.select('img.visual')[1].get('alt')
             except:
                 pass
 
             try:
-                temp_data['old-price'] = li.select('del')[0].get_text()
+                temp_data['old_price'] = li.select('del')[0].get_text()
             except:
                 pass
 
