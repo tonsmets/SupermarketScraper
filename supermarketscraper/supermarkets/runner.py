@@ -13,10 +13,10 @@ def test():
 	print("Runner")
 
 def run():
-	ah.fetch()
-	c1000.fetch()
-	coop.fetch()
-	deka.fetch()
-	#dirk.fetch() # Problematic on some urls
-	janlinders.fetch()
-	jumbo.fetch()
+	#ah.fetch()
+	#c1000.fetch()
+	#coop.fetch()
+	#deka.fetch()
+	dirk.fetch() # Problematic on some urls
+	#janlinders.fetch()
+	#jumbo.fetch()

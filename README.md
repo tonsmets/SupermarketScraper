@@ -12,7 +12,7 @@ This is still a work in progress. The code you find today could be gone or heavi
 - [x] C1000
 - [x] Coop
 - [x] Deka
-- [ ] Dirk
+- [x] Dirk
 - [x] Jan Linders
 - [x] Jumbo
 

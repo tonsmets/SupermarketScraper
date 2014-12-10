@@ -15,19 +15,17 @@ index_url = root_url + 'aanbiedingen'
 def get_actie_page_urls():
     response = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
-    return [a.attrs.get('href') for a in soup.select('div.rightside div.body p a[href^=aanbiedingen/]')]
+    urls = [a.attrs.get('href') for a in soup.select('div.rightside div.body p a[href^=aanbiedingen/]')]
+    return urls
 
 def get_actie_data(actie_page_url):
     actie_data = {}
     actie_data = models.defaultModel.copy()
     actie_data['supermarket'] = 'dirk'
     url = root_url + actie_page_url
-    url = url.replace("é","e")
     response = requests.get(url, headers=settings.headers)
     soup = bs4.BeautifulSoup(response.text)
     soup.encode('utf-8')
-    print(url)
-    print(soup)
     actie_data['url'] = root_url + actie_page_url
     actie_data['productname'] = soup.find('h2').get_text()
     actie_data['duration'] = soup.select('div.fromTill')[0].get_text().strip()
