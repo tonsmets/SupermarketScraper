@@ -29,7 +29,10 @@ def get_actie_data(actie_page_url):
     actie_data['url'] = root_url + actie_page_url
     actie_data['productname'] = soup.find('h2').get_text()
     actie_data['duration'] = soup.select('div.fromTill')[0].get_text().strip()
-    actie_data['amount'] = soup.select('div.subtitle')[0].get_text().strip()
+
+    amount = soup.select('div.subtitle')[0].get_text().strip()
+    if(amount != '' and amount != ' '):
+        actie_data['amount'] = amount 
 
     div_style = soup.find('div', {'class':'image'})['style']
     style = cssutils.parseStyle(div_style)
