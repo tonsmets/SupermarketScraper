@@ -5,6 +5,8 @@ Python project for scraping Dutch supermarkets
 
 The idea behind this piece of code is to run it on set intervals (cron jobs) to collect the data. Before running (1 day before, or just a couple of hours), it should run tests to see if everything is still working (it is always possible that a website is changed). If something is broken, it should give you enough time to fix the problem before the cron job wil start the scraping proces.
 
+In the second phase of this project I would like to add some postprocessing for the data. Things like downloading images, storing them and deleting old ones. It should als store some extra data about each run of the scraper to prevent me from drowning in endless data without knowing when it was scraped :P.
+
 This is still a work in progress. The code you find today could be gone or heavily modified by tomorrow!
 
 ## Current supported supermarkets:
@@ -29,7 +31,7 @@ In order to run this script you need to have some dependencies installed:
 
 There are some settings in util/settings.py you need to edit for your needs, but the defaults will probably work just fine.
 
-## To-Do's
+## First phase To-Do's
 - [x] Make main file to run the scraper and scrape all supermarkets
 - [x] Define better project structure
 - [x] Make the supermarkets into "modules"
@@ -40,6 +42,11 @@ There are some settings in util/settings.py you need to edit for your needs, but
 - [x] Add custom logging (with colors)
 - [ ] Add error handling
 - [ ] Add argument parsing to make different modes possible
+
+## Second phase To-Do's
+- [ ] Add image downloader and manager
+- [ ] Add database logging of each scraper run
+- [ ] Add data refiner to parse things like duration dates to timestamps
 
 ## Optional additions
 - [ ] Add web interface to view all results
