@@ -16,6 +16,7 @@ def fetch():
 
     r = requests.get(index_url, headers=settings.headers)
     soup = bs4.BeautifulSoup(r.text, 'html5lib')
+    print(soup)
 
     count = 0
 
@@ -34,7 +35,8 @@ def fetch():
         except:
             pass
         superdata['productname'] = bonus.select('div.detail h2')[0].get_text().strip()
-        superdata['duration'] = soup.select('div.columns p.header-bar__term')[0].get_text()
+        #superdata['duration'] = soup.select('div.columns p.header-bar__term')[0].get_text()
+        superdata['duration'] = 'This week'
         superdata['image'] = bonus.select('div.image img')[0].get('data-original')
         try:
             tempAmount = bonus.select('div.image p.unit')[0].get_text().strip()
