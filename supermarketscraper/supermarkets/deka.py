@@ -22,6 +22,8 @@ import bs4
 import requests
 import json
 import time
+import sys
+import traceback
 import re
 from util.logging import *
 import util.settings as settings
@@ -89,17 +91,34 @@ def get_actie_data(actie_page_url):
 
  
 def fetch():
-    LogI("Fetching Deka discounts...")
-    start_time = time.time() * 1000
+    try:
+        LogI("Fetching Deka discounts...")
+        start_time = time.time() * 1000
 
-    global count
+        global count
 
-    actie_page_urls = get_actie_page_urls()
-    for actie_page_url in actie_page_urls:
-        single_output = get_actie_data(actie_page_url)
+        actie_page_urls = get_actie_page_urls()
+        for actie_page_url in actie_page_urls:
+            single_output = get_actie_data(actie_page_url)
 
-    seconds = (time.time() * 1000) - start_time
-    LogI("Done fetching {0} Deka discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+        seconds = (time.time() * 1000) - start_time
+        LogI("Done fetching {0} Deka discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+    except requests.exceptions.ConnectionError:
+        e = None
+        if settings.debugging:
+            e = traceback.format_exc()
+        else:
+            e = sys.exc_info()[0]
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(e))
+        pass
+    except:
+        e = None
+        if settings.debugging:
+            e = traceback.format_exc()
+        else:
+            e = sys.exc_info()[0]
+        LogE("General failure! Check Traceback for info!", "{0}".format(e))
+        pass
 
 
 def getAmount(tag):

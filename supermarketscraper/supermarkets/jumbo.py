@@ -1,8 +1,10 @@
 import bs4
 import requests
-import re
 import json
 import time
+import sys
+import traceback
+import re
 from util.logging import *
 import util.settings as settings
 import models.model as models
@@ -26,7 +28,7 @@ def get_discount_page_urls():
     soup = bs4.BeautifulSoup(response.text)
     amount = soup.find('div', {'class' : 'ws-promotion-listing-pagination'}).get('data-jum-pagecount')
     dataUrl = soup.find('div', {'class' : 'ws-promotion-listing-pagination'}).get('data-jum-pagination-link-template')[:-1]
-    duration = soup.select('ul.jum-lister-navigation-tab li')[0].get_text()
+    duration = soup.select('li.jum-content-type-summary')[0].get_text()
     urls = []
     for x in range(0, int(amount) + 1):
         urls.append(dataUrl + str(x))
@@ -69,19 +71,36 @@ def get_discount_data(actie_page_url):
     return output
  
 def fetch():
-    LogI("Fetching Jumbo discounts...")
-    start_time = time.time() * 1000
+    try:
+        LogI("Fetching Jumbo discounts...")
+        start_time = time.time() * 1000
 
-    global count
-    
-    discount_page_urls = get_discount_page_urls()
+        global count
+        
+        discount_page_urls = get_discount_page_urls()
 
-    for discount_page_url in discount_page_urls:
-        superdata = get_discount_data(discount_page_url) 
-        db.insert(superdata)
+        for discount_page_url in discount_page_urls:
+            superdata = get_discount_data(discount_page_url) 
+            db.insert(superdata)
 
-    seconds = (time.time() * 1000) - start_time
-    LogI("Done fetching {0} Jumbo discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+        seconds = (time.time() * 1000) - start_time
+        LogI("Done fetching {0} Jumbo discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
+    except requests.exceptions.ConnectionError:
+        e = None
+        if settings.debugging:
+            e = traceback.format_exc()
+        else:
+            e = sys.exc_info()[0]
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(e))
+        pass
+    except:
+        e = None
+        if settings.debugging:
+            e = traceback.format_exc()
+        else:
+            e = sys.exc_info()[0]
+        LogE("General failure! Check Traceback for info!", "{0}".format(e))
+        pass
 
 def test():
     #will define test here
