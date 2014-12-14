@@ -9,6 +9,15 @@ In the second phase of this project I would like to add some postprocessing for 
 
 This is still a work in progress. The code you find today could be gone or heavily modified by tomorrow!
 
+Running the script is as easy as:
+```
+python3 main.py
+```
+To get the help function, add the -h or --help argument.
+```
+python3 main.py -h
+```
+
 ## Current supported supermarkets:
 - [x] Albert Heijn
 - [x] C1000
@@ -41,7 +50,7 @@ There are some settings in util/settings.py you need to edit for your needs, but
 - [x] Add debugging
 - [x] Add custom logging (with colors)
 - [ ] Add error handling
-- [ ] Add argument parsing to make different modes possible
+- [x] Add argument parsing to make different modes possible (still need to add more modes)
 
 ## Second phase To-Do's
 - [ ] Add image downloader and manager
