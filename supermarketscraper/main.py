@@ -13,14 +13,14 @@ def main(argv):
 		#opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
 		opts, args = getopt.getopt(argv,"hd",["help","debug"])
 	except getopt.GetoptError:
-		#print('test.py -i <inputfile> -o <outputfile>')
 		sys.exit(2)
 	for opt, arg in opts:
 		if opt == '-h' or opt == '--help':
 			LogI("SupermarketScraper Help function")
 			LogI("Permitted parameters are:")
-			LogI("# -h, --help")
-			LogI("# -d, --debug")
+			LogI("-h, --help (Show this info)")
+			LogI("-d, --debug (Verbose logging)")
+			#LogI("# -t, --tor")
 			sys.exit()
 		elif opt == '-d' or opt == '--debug':
 			settings.debugging = True
