@@ -88,8 +88,6 @@ def get_actie_data(actie_page_url):
         if settings.debugging:
             LogD("({0}) Fetched '{1}'".format(count, temp_data['productname']))
 
-
- 
 def fetch():
     try:
         LogI("Fetching Deka discounts...")

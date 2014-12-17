@@ -52,7 +52,7 @@ def get_discount_data(actie_page_url):
         discount_data['productname'] = discount.find('h3').get_text()
         discount_data['duration'] = duration
         discount_data['amount'] = discount.select('dd.jum-promotion-text-field')[0].get_text()
-        discount_data['image'] = discount.find('img').get('src')
+        discount_data['image'] = 'http://www.jumbo.com' + discount.select('dd.jum-item-figure img')[0].get('src')
 
         try:
             discount_data['action_price'] = discount.find(text=re.compile('Actieprijs')).replace("Actieprijs ","")
