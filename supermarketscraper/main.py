@@ -21,7 +21,7 @@ def main(argv):
 			LogH("-h, --help (Show this info)")
 			LogH("-v, --verbose (Verbose logging)")
 			LogH("-e, --error (Error logging)")
-			#LogI("# -t, --tor")
+			#LogI("# -t, --tor (Send all trafic via Tor")
 			sys.exit()
 		elif opt == '-e' or opt == '--error':
 			settings.debugging = True
@@ -33,7 +33,7 @@ def main(argv):
 
 	settings.print_info()
 
-	LogD("Debugging enabled!!\n")
+	LogD("Verbose logging enabled!!\n")
 
 	srunner.run()
 

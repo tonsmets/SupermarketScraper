@@ -14,8 +14,8 @@ def test():
 
 def run():
 	ah.fetch()
-	#c1000.fetch()
-	#coop.fetch()
+	c1000.fetch()
+	coop.fetch()
 	#deka.fetch()
 	#dirk.fetch()
 	#janlinders.fetch()

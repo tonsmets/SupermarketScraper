@@ -89,35 +89,17 @@ def get_actie_data(actie_page_url):
             LogD("({0}) Fetched '{1}'".format(count, temp_data['productname']))
 
 def fetch():
-    try:
-        LogI("Fetching Deka discounts...")
-        start_time = time.time() * 1000
+    LogI("Fetching Deka discounts...")
+    start_time = time.time() * 1000
 
-        global count
+    global count
 
-        actie_page_urls = get_actie_page_urls()
-        for actie_page_url in actie_page_urls:
-            single_output = get_actie_data(actie_page_url)
+    actie_page_urls = get_actie_page_urls()
+    for actie_page_url in actie_page_urls:
+        single_output = get_actie_data(actie_page_url)
 
-        seconds = (time.time() * 1000) - start_time
-        LogI("Done fetching {0} Deka discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
-    except requests.exceptions.ConnectionError:
-        e = None
-        if settings.debugging:
-            e = traceback.format_exc()
-        else:
-            e = sys.exc_info()[0]
-        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(e))
-        pass
-    except:
-        e = None
-        if settings.debugging:
-            e = traceback.format_exc()
-        else:
-            e = sys.exc_info()[0]
-        LogE("General failure! Check Traceback for info!", "{0}".format(e))
-        pass
-
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} Deka discounts in {1}ms.\n".format(count, format(seconds, '.2f')))
 
 def getAmount(tag):
     if tag == '248':
