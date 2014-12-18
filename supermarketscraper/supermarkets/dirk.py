@@ -13,82 +13,126 @@ import util.database as db
 
 root_url = 'https://www.dirk.nl/'
 index_url = root_url + 'aanbiedingen'
- 
-def get_actie_page_urls():
-    response = requests.get(index_url, headers=settings.headers)
-    soup = bs4.BeautifulSoup(response.text)
-    urls = [a.attrs.get('href') for a in soup.select('div.rightside div.body p a[href^=aanbiedingen/]')]
-    return urls
+
+count = 0
+failedcount = 0
+totalexceptions = 0
 
 def get_actie_data(actie_page_url):
+    global count
+    global failedcount
+    global totalexceptions
+    exceptioncount = 0
     actie_data = {}
     actie_data = models.defaultModel.copy()
     actie_data['supermarket'] = 'dirk'
     url = root_url + actie_page_url
-    response = requests.get(url, headers=settings.headers)
-    soup = bs4.BeautifulSoup(response.text)
-    soup.encode('utf-8')
+    try:
+        response = requests.get(url, headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
+
+    try:
+        soup = bs4.BeautifulSoup(response.text)
+        soup.encode('utf-8')
+    except:
+        LogE("Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+        return
+
     actie_data['url'] = root_url + actie_page_url
-    actie_data['productname'] = soup.find('h2').get_text()
-    actie_data['duration'] = soup.select('div.fromTill')[0].get_text().strip()
 
-    amount = soup.select('div.subtitle')[0].get_text().strip()
-    if(amount != '' and amount != ' '):
-        actie_data['amount'] = amount 
+    try:
+        actie_data['productname'] = soup.find('h2').get_text()
+    except:
+        LogE("[IGNORING] Productname not found","{0}".format(sys.exc_info()[0]))
+        exceptioncount = exceptioncount + 1
+        pass
 
-    div_style = soup.find('div', {'class':'image'})['style']
-    style = cssutils.parseStyle(div_style)
-    url = style['background-image']
-    url = url.replace('url(', '').replace(')', '')
-    actie_data['image'] = root_url + url
+    try:
+        actie_data['duration'] = soup.select('div.fromTill')[0].get_text().strip()
+    except IndexError as e:
+        LogE("[IGNORING] Duration not found","{0}".format(e))
+        exceptioncount = exceptioncount + 1
+        pass
+
+    try:
+        amount = soup.select('div.subtitle')[0].get_text().strip()
+        if(amount != '' and amount != ' ' and amount is not None):
+            actie_data['amount'] = amount 
+    except IndexError as e:
+        LogE("[IGNORING] Amount not found","{0}".format(e))
+        exceptioncount = exceptioncount + 1
+        pass
+
+    try:
+        div_style = soup.find('div', {'class':'image'})['style']
+        style = cssutils.parseStyle(div_style)
+        url = style['background-image']
+        url = url.replace('url(', '').replace(')', '')
+        actie_data['image'] = root_url + url
+    except:
+        LogE("[IGNORING] Image not found","{0}".format(sys.exc_info()[0]))
+        exceptioncount = exceptioncount + 1
+        pass
 
     try:
         actie_data['action_price'] = soup.select('div.star')[0].get('title').strip().replace(u"\u20AC ","").replace(",",".")
-    except:
+    except IndexError as e:
+        LogE("[IGNORING] Action price not found","{0}".format(e))
+        exceptioncount = exceptioncount + 1
         pass
 
     try:
         actie_data['old_price'] = soup.select('span.stripe')[0].get_text()
-    except:
+    except IndexError as e:
+        LogE("[IGNORING] Old price not found","{0}".format(e))
+        exceptioncount = exceptioncount + 1
         pass
 
-    return actie_data
- 
+    totalexceptions = totalexceptions + exceptioncount
+
+    count = count + 1
+    if exceptioncount > settings.maxErrors:
+        LogE("Too much missing info, skipping this discount","{0} Errors occured".format(exceptioncount))
+        failedcount = failedcount + 1
+    else:
+        db.insert(actie_data)
+        LogD("[{0}] ({1}) Fetched '{2}'".format(exceptioncount, count, actie_data['productname']))
+    
+    if failedcount > settings.maxFailedDiscounts:
+        LogE("Skipping this supermarket, too much missing info.","More than {0} discounts missing too much info".format(settings.maxFailedDiscounts))
+        LogI("Skipping this supermarket, too much missing info")
+        LogI("More than {0} discounts missing too much info".format(settings.maxFailedDiscounts))
+        return
+
 def fetch():
+    LogI("Fetching Dirk discounts...")
+    start_time = time.time() * 1000
+
     try:
-        LogI("Fetching Dirk discounts...")
-        start_time = time.time() * 1000
+        response = requests.get(index_url, headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
 
-        count = 0
-
-        actie_page_urls = get_actie_page_urls()
-        for actie_page_url in actie_page_urls:
-            single_output = get_actie_data(actie_page_url)
-            
-            count = count + 1
-            db.insert(single_output)
-
-            if settings.debugging:
-                LogD("({0}) Fetched '{1}'".format(count, single_output['productname']))
-
-        seconds = (time.time() * 1000) - start_time
-        LogI("Done fetching {0} Dirk discounts in {1}ms.\n".format(count, format(seconds, '.2f')))    
-    except requests.exceptions.ConnectionError:
-        e = None
-        if settings.debugging:
-            e = traceback.format_exc()
-        else:
-            e = sys.exc_info()[0]
-        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(e))
-        pass
+    try:
+        soup = bs4.BeautifulSoup(response.text)
     except:
-        e = None
-        if settings.debugging:
-            e = traceback.format_exc()
-        else:
-            e = sys.exc_info()[0]
-        LogE("General failure! Check Traceback for info!", "{0}".format(e))
-        pass
+        LogE("Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+        return
+
+    actie_page_urls = [a.attrs.get('href') for a in soup.select('div.rightside div.body p a[href^=aanbiedingen/]')]
+
+    global count
+    global failedcount
+    global totalexceptions
+
+    for actie_page_url in actie_page_urls:
+        single_output = get_actie_data(actie_page_url)
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching {0} Dirk discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
 
 def test():
     #will define test here

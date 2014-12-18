@@ -113,7 +113,7 @@ def fetch():
             return
 
     seconds = (time.time() * 1000) - start_time
-    LogI("Done fetching {0} AH discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
+    LogI("Done fetching {0} Coop discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
  
 def test():
     #will define test here

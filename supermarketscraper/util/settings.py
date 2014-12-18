@@ -16,8 +16,8 @@ headers = {
 }
 
 # Parsing
-maxErrors = 4
-maxFailedDiscounts = 5
+maxErrors = 3 # Max errors per discount
+maxFailedDiscounts = 5 # Max failed discounts per supermarket
 
 """
 Applications specific static data
