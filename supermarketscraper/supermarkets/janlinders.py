@@ -100,32 +100,33 @@ def fetch():
                 exceptioncount = exceptioncount + 1
                 pass
 
-            # TODO
-            try:
+            if actdiv.select('div.action div.regular_price span.big') and actdiv.select('div.action div.regular_price span.small'):
                 temp_data['action_price'] = actdiv.select('div.action div.regular_price span.big')[0].get_text() + "." + actdiv.select('div.action div.regular_price span.small')[0].get_text()
-            except:
-                pass
-
-            try:
-                temp_data['action_price'] = actdiv.select('div.big')[0].get_text() + "." + actdiv.select('div.small')[1].get_text()
-            except:
-                pass
-
-            try:
+            
+            elif actdiv.select('div.x_price_w_amount div.small') and actdiv.select('div.x_price_w_amount div.big'):
+                temp_data['action_price'] = actdiv.select('div.x_price_w_amount div.small')[0].get_text() + " " + actdiv.select('div.x_price_w_amount div.big')[0].get_text() + "." + actdiv.select('div.x_price_w_amount div.small')[1].get_text()
+            
+            elif actdiv.select('div.x_free div.big') and actdiv.select('div.x_free div.small'):
+                temp_data['action_price'] = ' '.join(actdiv.select('div.x_free div.big')[0].get_text().strip().split()) + " " + ' '.join(actdiv.select('div.x_free div.small')[0].get_text().strip().split())
+            
+            elif actdiv.select('div.regular_price div.big') and actdiv.select('div.regular_price div.small'):
                 temp_data['action_price'] = actdiv.select('div.regular_price div.big')[0].get_text() + "." + actdiv.select('div.regular_price div.small')[0].get_text()
-            except:
-                pass
+            
+            #elif actdiv.select('div.price div.big') and actdiv.select('div.price div.small'):
+                #temp_data['action_price'] = actdiv.select('div.price div.big')[0].get_text() + "." + actdiv.select('div.price div.small')[0].get_text()
+            
+            elif actdiv.select('div.action div.x_discount div.big') and actdiv.select('div.action div.x_discount div.small'):
+                temp_data['action_price'] = ' '.join(actdiv.select('div.action div.x_discount div.big')[0].get_text().strip().split()) + " " + actdiv.select('div.action div.x_discount div.small')[0].get_text()
+            
+            elif actdiv.select('div.x_get_for div.small'):
+                temp_data['action_price'] = ' '.join(actdiv.select('div.x_get_for div.small')[0].get_text().strip().split()) + ", " + actdiv.select('div.x_get_for div.small')[1].get_text().strip()
+            
+            elif actdiv.select('div.x_half_price div.small'):
+                temp_data['action_price'] = ' '.join(actdiv.select('div.x_half_price div.small')[0].get_text().strip().split()) + " " + actdiv.select('div.x_half_price div.small')[1].get_text().strip()
 
-            try:
-                temp_data['action_price'] = actdiv.select('div.price div.big')[0].get_text() + "." + actdiv.select('div.price div.small')[0].get_text()
-            except:
-                pass
-
-            try:
-                temp_data['action_price'] = actdiv.select('div.action div.x_discount div.big')[0].get_text() + " " + actdiv.select('div.action div.x_discount div.small')[0].get_text()
-            except:
-                pass
-
+            else:
+                LogE("[IGNORING] Action price not found","None")
+                exceptioncount = exceptioncount + 1
             totalexceptions = totalexceptions + exceptioncount
 
             count = count + 1

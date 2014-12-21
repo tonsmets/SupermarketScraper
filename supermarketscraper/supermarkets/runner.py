@@ -19,4 +19,4 @@ def run():
 	deka.fetch()
 	dirk.fetch()
 	janlinders.fetch()
-	#jumbo.fetch()
+	jumbo.fetch()

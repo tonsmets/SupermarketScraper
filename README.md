@@ -49,7 +49,7 @@ There are some settings in util/settings.py you need to edit for your needs, but
 - [x] Add database support and define a model to store all data in
 - [x] Add debugging
 - [x] Add custom logging (with colors)
-- [ ] Add error handling
+- [x] Add error handling
 - [x] Add argument parsing to make different modes possible (still need to add more modes)
 
 ## Second phase To-Do's
