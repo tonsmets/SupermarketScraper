@@ -26,6 +26,11 @@ python3 main.py -h
 - [x] Dirk
 - [x] Jan Linders
 - [x] Jumbo
+- [ ] Lidl
+- [ ] ~~Emté~~
+- [ ] Aldi
+- [ ] Attent
+- [ ] Poiesz
 
 ## Dependencies
 In order to run this script you need to have some dependencies installed:
