@@ -43,7 +43,15 @@ In order to run this script you need to have some dependencies installed:
 * colorama
 * cssutils
 
-There are some settings in util/settings.py you need to edit for your needs, but the defaults will probably work just fine.
+The software uses MongoDB as database supplier so you will also need to install that. 
+
+To install all needed dependencies on a debian flavoured linux distribution (tested on Ubuntu 14.04 LTS) use the following commands:
+```
+sudo apt-get install python3 python3-pip mongodb
+sudo pip3 install beautifulsoup4 requests pymongo html5lib colorama cssutils
+```
+
+There are some settings in util/settings.py you can edit for your needs, but the defaults will probably work just fine.
 
 ## First phase To-Do's
 - [x] Make main file to run the scraper and scrape all supermarkets
