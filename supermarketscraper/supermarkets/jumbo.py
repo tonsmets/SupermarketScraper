@@ -13,10 +13,6 @@ import util.database as db
 
 root_url = 'http://www.jumbo.com'
 index_url = root_url + '/aanbiedingen'
- 
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
-}
 
 duration = ""
 
@@ -31,7 +27,7 @@ def get_discount_data(actie_page_url):
     global failedcount
     
     try:
-        response = requests.get(actie_page_url, headers=headers)
+        response = requests.get(actie_page_url, headers=settings.headers)
     except requests.exceptions.ConnectionError as ce:
         LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
         return
@@ -109,7 +105,7 @@ def fetch():
     LogI("Fetching Jumbo discounts...")
     start_time = time.time() * 1000
     try:
-        response = requests.get(index_url)
+        response = requests.get(index_url, headers=settings.headers)
     except requests.exceptions.ConnectionError as ce:
         LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
         return
