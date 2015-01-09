@@ -1,6 +1,8 @@
 SupermarketScraper
 ==================
 
+# Moved this project to a private repo. You can still use the code below!
+
 Python project for scraping Dutch supermarkets
 
 The idea behind this piece of code is to run it on set intervals (cron jobs) to collect the data. Before running (1 day before, or just a couple of hours), it should run tests to see if everything is still working (it is always possible that a website has changed). If something is broken, it should give you enough time to fix the problem before the cron job wil start the scraping proces.
