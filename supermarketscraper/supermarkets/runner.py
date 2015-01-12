@@ -21,4 +21,4 @@ def run():
 	#dirk.fetch()
 	#janlinders.fetch()
 	#jumbo.fetch()
-	aldi.fetch()
+	#aldi.fetch()
