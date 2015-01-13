@@ -9,6 +9,7 @@ import util.settings as settings
 import models.model as models
 import util.database as db
 
+
 def fetch():
     LogI("Fetching AH discounts...")
     start_time = time.time() * 1000
