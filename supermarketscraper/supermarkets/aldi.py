@@ -118,12 +118,12 @@ def fetch():
                 pass
 
             # DESCRIPTION  
-            # try:
-            #     superdata['description'] = discount.select('div.richtext')[0].get_text().strip()
-            # except IndexError as e:
-            #     LogE("[IGNORING] Description not found","{0}".format(e))
-            #     exceptioncount = exceptioncount + 1
-            #     pass
+            try:
+                superdata['description'] = discount.select('div.richtext')[0].get_text().strip()
+            except IndexError as e:
+                LogE("[IGNORING] Description not found","{0}".format(e))
+                exceptioncount = exceptioncount + 1
+                pass
 
             # OLD PRICE
             try:
