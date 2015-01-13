@@ -3,7 +3,7 @@ import time
 import sys, getopt
 from util.logging import *
 from colorama import init
-import supermarkets.runner as runner
+import supermarkets.runner as srunner
 
 def main(argv):
 	init()
@@ -35,7 +35,7 @@ def main(argv):
 
 	LogD("Verbose logging enabled!!\n")
 
-	runner.run()
+	srunner.run()
 
 	seconds = (time.time() * 1000) - start_time
 	PrintLine()

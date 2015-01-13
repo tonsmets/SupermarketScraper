@@ -1,0 +1,695 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"te",
+				"tempAmount"
+			],
+			[
+				"def",
+				"defaultModel"
+			],
+			[
+				"de",
+				"defaultModel"
+			],
+			[
+				"disco",
+				"discount_data"
+			],
+			[
+				"pro",
+				"productname"
+			],
+			[
+				"supe",
+				"super_data"
+			],
+			[
+				"db",
+				"dbdata"
+			],
+			[
+				"trimm",
+				"trimmableArray"
+			],
+			[
+				"tr",
+				"trimmableArray"
+			],
+			[
+				"t",
+				"trimmableArray"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"get",
+				"getMonth"
+			],
+			[
+				"ge",
+				"getDate"
+			],
+			[
+				"to",
+				"toString"
+			],
+			[
+				"event",
+				"eventDate"
+			],
+			[
+				"eve",
+				"eventDate"
+			],
+			[
+				"this",
+				"thisDate"
+			],
+			[
+				"backgrou",
+				"background-color"
+			],
+			[
+				"item-",
+				"item-content"
+			],
+			[
+				"i",
+				"inline-table"
+			],
+			[
+				"bl",
+				"inline-block"
+			],
+			[
+				"border",
+				"border-bottom"
+			],
+			[
+				"ionic",
+				"ionicModal"
+			],
+			[
+				"map",
+				"mapOptions"
+			],
+			[
+				"temp",
+				"templates"
+			],
+			[
+				"templat",
+				"templateUrl"
+			],
+			[
+				"fo",
+				"fourthVid"
+			],
+			[
+				"th",
+				"thirdVid"
+			],
+			[
+				"se",
+				"secondVid"
+			],
+			[
+				"bo",
+				"bonus_products_2"
+			],
+			[
+				"bonu",
+				"bonus_products_1"
+			],
+			[
+				"bonus_",
+				"bonus_products_1"
+			],
+			[
+				"bonus",
+				"bonus_products"
+			],
+			[
+				"multi",
+				"multiplyFour"
+			],
+			[
+				"out",
+				"outputNumber"
+			],
+			[
+				"num",
+				"num2value"
+			],
+			[
+				"n",
+				"num1value"
+			],
+			[
+				"num1",
+				"num1mod"
+			],
+			[
+				"mul",
+				"mmultiplyThree"
+			],
+			[
+				"num2",
+				"num2atIndexIsSet"
+			],
+			[
+				"largestnum",
+				"largestNumberSize"
+			],
+			[
+				"nu",
+				"num2atIndexIsSet"
+			],
+			[
+				"lar",
+				"largestNumberSize"
+			],
+			[
+				"Url",
+				"urlList"
+			],
+			[
+				"s",
+				"str"
+			],
+			[
+				"url",
+				"urlList"
+			],
+			[
+				"ca",
+				"category"
+			],
+			[
+				"in",
+				"index_url"
+			],
+			[
+				"reso",
+				"response"
+			],
+			[
+				"new",
+				"news_urls"
+			],
+			[
+				"scr",
+				"scrapers"
+			],
+			[
+				"ne",
+				"news_urls"
+			],
+			[
+				"resp",
+				"response"
+			],
+			[
+				"soup",
+				"soupObj"
+			],
+			[
+				"en",
+				"endMessage"
+			],
+			[
+				"pa",
+				"page_url"
+			],
+			[
+				"bu",
+				"buffer_url"
+			],
+			[
+				"buff",
+				"buffer_url"
+			],
+			[
+				"buf",
+				"buffer_size"
+			],
+			[
+				"U",
+				"User-Agent"
+			],
+			[
+				"act",
+				"action-price"
+			],
+			[
+				"re",
+				"response"
+			],
+			[
+				"head",
+				"headers"
+			],
+			[
+				"r",
+				"response"
+			],
+			[
+				"acti",
+				"actie_page_url"
+			],
+			[
+				"ac",
+				"actie_data"
+			],
+			[
+				"actie",
+				"actie_data"
+			],
+			[
+				"tem",
+				"tempduration"
+			],
+			[
+				"find",
+				"findAll"
+			],
+			[
+				"old",
+				"old-price"
+			],
+			[
+				"li",
+				"list_items"
+			],
+			[
+				"text",
+				"textual"
+			],
+			[
+				"di",
+				"discount-price"
+			],
+			[
+				"actie_pa",
+				"actie_page_urls"
+			],
+			[
+				"Da",
+				"DatabaseSetting"
+			],
+			[
+				"DA",
+				"DatabaseSetting"
+			],
+			[
+				"_d",
+				"_dbname"
+			],
+			[
+				"tbl",
+				"tblMain"
+			],
+			[
+				"_db",
+				"_dbsetting1"
+			],
+			[
+				"dbse",
+				"dbsetting1"
+			],
+			[
+				"dbsetting",
+				"DatabaseSetting"
+			],
+			[
+				"tb",
+				"tblMain"
+			],
+			[
+				"pas",
+				"password"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 67.0,
+		"selected_items":
+		[
+			[
+				"comment",
+				"Toggle Comment"
+			],
+			[
+				"python",
+				"Set Syntax: Python"
+			],
+			[
+				"jav",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"javas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"pretty",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"php",
+				"Set Syntax: PHP"
+			],
+			[
+				"comm",
+				"Toggle Comment"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"com",
+				"Toggle Comment"
+			],
+			[
+				"comme",
+				"Toggle Comment"
+			],
+			[
+				"pre",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"",
+				"About"
+			],
+			[
+				"pret",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"prett",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"pytho",
+				"Set Syntax: Python"
+			],
+			[
+				"jso",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"s",
+				"Set Syntax: JSON"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"syntax php",
+				"Set Syntax: PHP"
+			],
+			[
+				"sscss",
+				"Set Syntax: CSS"
+			],
+			[
+				"ssphp",
+				"Set Syntax: PHP"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/models/model.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/util/database.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/util/logging.py",
+		"/Users/Ton/Projects/SupermarketScraper/README.md",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/supermarkets/jumbo.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/supermarkets/ah.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/util/settings.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/supermarkets/runner.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/main.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/supermarkets/__init__.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/libs/bs4/__init__.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/libs/bs4/builder/__init__.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/libs/bs4/element.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/libs/bs4/builder/_htmlparser.py",
+		"/Users/Ton/Projects/SupermarketScraper/supermarketscraper/libs/__init__.py",
+		"/Users/Ton/Projects/SupermarketScraper/main.py",
+		"/Users/Ton/Projects/Shaper/Development/Server/app.js",
+		"/Users/Ton/Desktop/ikbenbaas.js",
+		"/Users/Ton/Projects/Vico/app/Argus/www/js/controllers.js",
+		"/Users/Ton/Desktop/ikbenbaas.txt",
+		"/Users/Ton/Projects/Vico/app/Argus/www/index.html",
+		"/Users/Ton/Projects/Vico/app/Argus/www/js/services.js",
+		"/Users/Ton/Projects/Vico/app/Argus/www/templates/tab-events.html",
+		"/Users/Ton/Projects/Vico/app/Argus/www/css/style2.css",
+		"/Users/Ton/Projects/Vico/app/Argus/www/templates/event-detail.html",
+		"/Users/Ton/Documents/tweak.py",
+		"/Users/Ton/Projects/Vico/app/Argus/plugins/de.appplant.cordova.plugin.local-notification/src/ios/APPLocalNotification.m",
+		"/Users/Ton/Projects/Vico/server/app.js",
+		"/Users/Ton/Projects/Vico/app/Argus/config.xml",
+		"/Users/Ton/Projects/Vico/server/api/general/general.controller.js",
+		"/Users/Ton/Projects/Vico/app/Argus/package.json",
+		"/Users/Ton/Projects/Vico/app/Argus/ionic.project",
+		"/Users/Ton/Projects/Vico/server/routes.js",
+		"/Users/Ton/Projects/Vico/app/Argus/www/lib/ionic/css/ionic.css",
+		"/Users/Ton/Projects/Vico/app/Argus/www/templates/friend-detail.html",
+		"/Users/Ton/Projects/fuelprotect/app/www/js/app.js",
+		"/Users/Ton/Projects/Vico/app/Argus/www/js/app.js",
+		"/Users/Ton/Projects/Vico/app/Argus/www/templates/tabs.html",
+		"/Users/Ton/Downloads/ecard.php",
+		"/Users/Ton/Downloads/gallery.php",
+		"/Applications/XAMPP/xamppfiles/htdocs/Websites/gala/index.php",
+		"/Applications/XAMPP/xamppfiles/htdocs/Websites/gala/data.php",
+		"/Users/Ton/Downloads/WhatsAPI-Official-master/examples/test_ton.php",
+		"/Users/Ton/Projects/fuelproject-dashboard/server/api/drivers/driver.model.js",
+		"/Users/Ton/Projects/Vico/server/api/events/event.model.js",
+		"/Users/Ton/Projects/Vico/server/api/trucks/truck.model.js",
+		"/Users/Ton/Projects/Vico/server/api/drivers/driver.model.js",
+		"/Users/Ton/Documents/SuperScraper/coop.py",
+		"/Users/Ton/Documents/SuperScraper/c1000.json",
+		"/Users/Ton/Documents/SuperScraper/jumbo.py",
+		"/Users/Ton/Documents/SuperScraper/dirk.json",
+		"/Users/Ton/Documents/SuperScraper/deka.json",
+		"/Users/Ton/Documents/SuperScraper/janlinders.json",
+		"/Users/Ton/Documents/SuperScraper/jumbo.json",
+		"/Users/Ton/Documents/SuperScraper/ah.json",
+		"/Users/Ton/Documents/SuperScraper/ah.py",
+		"/Users/Ton/Projects/startstop/server/models/user.js",
+		"/Users/Ton/Projects/startstop/server/models/journey.js",
+		"/Users/Ton/Projects/startstop/server/serve.js",
+		"/Users/Ton/Documents/artikel.html",
+		"/Users/Ton/Projects/fuelprotect/app/www/js/common/directives/directives.js",
+		"/Users/Ton/Projects/fuelprotect/app/www/js/common/partials/event-list-item.html",
+		"/Users/Ton/Projects/fuelprotect/app/www/js/common/services/appState.js",
+		"/Users/Ton/Projects/fuelprotect/app/www/templates/trucks/trucks_detail_nav.html",
+		"/Users/Ton/Projects/fuelprotect/app/www/js/trucks/services/truckService.js",
+		"/Users/Ton/Projects/fuelprotect/app/www/js/services.js",
+		"/Users/Ton/Projects/todo/www/index.html",
+		"/Users/Ton/Projects/todo/www/js/app.js",
+		"/Users/Ton/Projects/fuelprotect/app/www/index.html",
+		"/Applications/XAMPP/xamppfiles/htdocs/Websites/happy.php",
+		"/Users/Ton/Documents/pirate.py",
+		"/Users/Ton/Documents/happybirthday.py",
+		"/Users/Ton/piratebay.json",
+		"/Users/Ton/Documents/maze.py",
+		"/Users/Ton/Documents/test.py",
+		"/Users/Ton/Projects/piratebay.json",
+		"/Users/Ton/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/Ton/Documents/SuperScraper/deka.py",
+		"/Users/Ton/Documents/tweakers.json",
+		"/Users/Ton/Documents/sitemap_nieuws_0-25000.xml",
+		"/Users/Ton/Documents/tweakers.py",
+		"/Users/Ton/Documents/tweakers_old.py",
+		"/Users/Ton/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/Ton/Documents/SuperScraper/janlinders.py",
+		"/Users/Ton/Documents/SuperScraper/c1000.py",
+		"/Users/Ton/Documents/SuperScraper/dirk.py",
+		"/Users/Ton/Documents/SuperScraper/coop.json",
+		"/Users/Ton/Documents/sligro_feed.json",
+		"/Users/Ton/Documents/jumbo.json",
+		"/Users/Ton/Documents/kapperssite.php",
+		"/Users/Ton/Documents/kapper.py",
+		"/Users/Ton/Downloads/project/index.html"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"deka.py",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"bs4",
+			"stringValue",
+			"withId",
+			".item-co",
+			"item-complex",
+			"bar",
+			"font",
+			"font-family",
+			"font",
+			".bar.",
+			".bar",
+			"title",
+			".list .item",
+			".item",
+			"scroll",
+			"					    //",
+			".padding",
+			"ion-content",
+			"console",
+			"rutte",
+			"appState",
+			"title",
+			"output",
+			"calc",
+			"num1atIndexIsSet",
+			"mask",
+			"num2atIndexIsSet",
+			"mask",
+			"declanPlus",
+			"\"amount\": \"Unknown\"",
+			"tempAmo",
+			"\"amount\": \"Unknown\"",
+			"Unknown",
+			"roomboter",
+			"stamppotten",
+			"\\u",
+			"%",
+			"sediamo",
+			"sittard",
+			"L401"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"tag"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 112.0
+	},
+	"output.find_results":
+	{
+		"height": 193.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
