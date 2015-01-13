@@ -97,11 +97,14 @@ def fetch():
         # ACTION PRICE    
         try:
             superdata['action_price'] = discount.select('div.forPrice div.whole')[0].get_text() + "." + discount.select('div.forPrice div.part')[0].get_text()
-            superdata['action_price'] = discount.select('div.forPrice div.combined')[0].get_text()
         except IndexError as e:
-            if superdata['action_price'] is None:
-                LogE("[IGNORING] Action price not found","{0}".format(e))
-                exceptioncount = exceptioncount + 1
+            try:
+                superdata['action_price'] = discount.select('div.forPrice div.combined')[0].get_text()
+            except IndexError as ex:  
+                if superdata['action_price'] is None:
+                    LogE("[IGNORING] Action price not found","{0}".format(e))
+                    exceptioncount = exceptioncount + 1
+                pass
             pass
 
         # OLD PRICE
