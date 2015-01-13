@@ -22,7 +22,7 @@ maxFailedDiscounts = 5 # Max failed discounts per supermarket
 """
 Applications specific static data
 """
-version = '1.0.2'
+version = '1.0.3'
 url = 'https://github.com/tonsmets/SupermarketScraper'
 
 def print_info():

@@ -28,9 +28,9 @@ python3 main.py -h
 - [x] Jumbo
 - [ ] Lidl
 - [ ] ~~Emté~~
-- [ ] Aldi
+- [x] Aldi (only the bigger advertisements still need to be added)
 - [ ] Attent
-- [ ] Poiesz
+- [x] Poiesz
 
 ## Dependencies
 In order to run this script you need to have some dependencies installed:

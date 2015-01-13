@@ -6,6 +6,7 @@ import supermarkets.dirk as dirk
 import supermarkets.janlinders as janlinders
 import supermarkets.jumbo as jumbo
 import supermarkets.aldi as aldi
+import supermarkets.poiesz as poiesz
 
 from util.logging import *
 import util.settings as settings
@@ -22,3 +23,4 @@ def run():
 	janlinders.fetch()
 	jumbo.fetch()
 	aldi.fetch()
+	poiesz.fetch()
