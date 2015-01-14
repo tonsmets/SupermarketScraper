@@ -72,15 +72,15 @@ def get_discount_data(actie_page_url):
 
         try:
             discount_data['action_price'] = discount.find(text=re.compile('Actieprijs')).replace("Actieprijs ","")
-        except:
-            LogE("[IGNORING] Action price not found","{0}".format(sys.exc_info()[0]))
+        except AttributeError as e:
+            LogE("[IGNORING] Action price not found","{0}".format(e))
             exceptioncount = exceptioncount + 1
             pass
 
         try:
             discount_data['old_price'] = discount.find(text=re.compile('Normale prijs')).replace("Normale prijs ","")
-        except:
-            LogE("[IGNORING] Old price not found","{0}".format(sys.exc_info()[0]))
+        except AttributeError as e:
+            LogE("[IGNORING] Old price not found","{0}".format(e))
             exceptioncount = exceptioncount + 1
             pass
 

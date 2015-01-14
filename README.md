@@ -66,9 +66,9 @@ There are some settings in util/settings.py you can edit for your needs, but the
 - [x] Add argument parsing to make different modes possible (still need to add more modes)
 
 ## Second phase To-Do's
-- [ ] Add image downloader and manager
+- [ ] ~~Add image downloader and manager~~
 - [ ] Add database logging of each scraper run
-- [ ] Add data refiner to parse things like duration dates to timestamps
+- [ ] Add post processor to get all data in same format
 
 ## Optional additions
 - [ ] Add web interface to view all results
