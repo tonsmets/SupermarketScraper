@@ -46,7 +46,7 @@ In order to run this script you need to have some dependencies installed:
 The software uses MongoDB as database supplier so you will also need to install that. 
 
 To install all needed dependencies on a debian flavoured linux distribution (tested on Ubuntu 14.04 LTS) use the following commands:
-```
+```bash
 sudo apt-get install python3 python3-pip mongodb
 sudo pip3 install beautifulsoup4 requests pymongo html5lib colorama cssutils
 ```
