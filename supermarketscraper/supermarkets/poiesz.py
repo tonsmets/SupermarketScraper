@@ -76,6 +76,7 @@ def fetch():
         # AMOUNT
         try:
             tempAmount = discount.select('div.shieldNew div.top')[0].get_text().strip()
+            tempAmount = ' '.join(tempAmount.split())
             if tempAmount is not None:
                 superdata['amount'] = tempAmount
         except IndexError as e:
@@ -96,10 +97,12 @@ def fetch():
 
         # ACTION PRICE    
         try:
-            superdata['action_price'] = discount.select('div.forPrice div.whole')[0].get_text() + "." + discount.select('div.forPrice div.part')[0].get_text()
+            tempPrice = discount.select('div.forPrice div.whole')[0].get_text().strip() + "." + discount.select('div.forPrice div.part')[0].get_text().strip()
+            superdata['action_price'] = ' '.join(tempPrice.split())
         except IndexError as e:
             try:
-                superdata['action_price'] = discount.select('div.forPrice div.combined')[0].get_text()
+                tempPrice = discount.select('div.forPrice div.combined')[0].get_text().strip()
+                superdata['action_price'] = ' '.join(tempPrice.split())
             except IndexError as ex:  
                 if superdata['action_price'] is None:
                     LogE("[IGNORING] Action price not found","{0}".format(e))
@@ -109,7 +112,8 @@ def fetch():
 
         # OLD PRICE
         try:
-            superdata['old_price'] = discount.select('div.fromPriceWrap')[0].get_text()
+            tempOld = discount.select('div.fromPriceWrap')[0].get_text().strip()
+            superdata['old_price'] = ' '.join(tempOld.split())
         except IndexError as e:
             LogE("[IGNORING] Old price not found","{0}".format(e))
             exceptioncount = exceptioncount + 1
