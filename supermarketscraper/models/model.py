@@ -19,3 +19,17 @@ defaultModel['bonus'] = 'N/A'
 
 # Additional data
 defaultModel['scrape_timestamp'] = str(datetime.datetime.now())
+
+"""
+Supermarket meta model for storing additional data
+"""
+metaModel = {}
+metaModel['supermarket'] = ''
+metaModel['superid'] = ''
+metaModel['name'] = ''
+metaModel['address'] = ''
+metaModel['lat'] = ''
+metaModel['lon'] = ''
+metaModel['phone'] = ''
+metaModel['opening'] = []
+metaModel['services'] = []

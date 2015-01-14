@@ -127,6 +127,19 @@ def fetch():
     seconds = (time.time() * 1000) - start_time
     LogI("Done fetching {0} AH discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
 
+def meta():
+    try:
+        r = requests.get('http://www.ah.nl/data/winkelinformatie/winkels/json', headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
+
+    data = json.loads(r.text)
+    #print(data)
+    LogI("Aantal supermarkten: " + str(len(data['stores'])))
+    for store in data['stores']:
+        LogI("[" + store['no'] + "] [" + store['status'] + "] " + store['format'] + " " + store['street'] + " " + store['city'])
+
 def test():
     #will define test here
     LogI("AH test")
