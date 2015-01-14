@@ -8,6 +8,7 @@ try:
 	client = MongoClient(settings.mongoUrl)
 	db = client[settings.dbname]
 	collection = db[settings.collection]
+	metacollection = db[settings.metacollection]
 except:
 	e = None
 	if settings.debugging:
@@ -19,3 +20,6 @@ except:
 
 def insert(data):
 	collection.insert(data)
+
+def addMeta(data):
+	pass

@@ -9,6 +9,7 @@ debugging = False
 mongoUrl = 'mongodb://localhost:27017/'
 dbname = 'SupermarketScraper'
 collection = 'data'
+metacollection = 'metadata'
 
 # Requests
 headers = {

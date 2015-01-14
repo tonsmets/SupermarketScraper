@@ -128,6 +128,7 @@ def fetch():
     LogI("Done fetching {0} AH discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
 
 def meta():
+    LogI("Fetching AH metadata...")
     try:
         r = requests.get('http://www.ah.nl/data/winkelinformatie/winkels/json', headers=settings.headers)
     except requests.exceptions.ConnectionError as ce:
@@ -138,7 +139,84 @@ def meta():
     #print(data)
     LogI("Aantal supermarkten: " + str(len(data['stores'])))
     for store in data['stores']:
-        LogI("[" + store['no'] + "] [" + store['status'] + "] " + store['format'] + " " + store['street'] + " " + store['city'])
+        #LogI("[" + store['no'] + "] [" + store['status'] + "] " + store['format'] + " " + store['street'] + " " + store['city'])
+        try:
+            req = requests.get('http://www.ah.nl/winkel/' + store['no'], headers=settings.headers)
+        except requests.exceptions.ConnectionError as ce:
+            LogE("[META] Unable to connect to supermarket detail page","{0}".format(ce))
+        except KeyError as e:
+            LogE("[META] Unique number not found","{0}".format(e))
+
+        try:
+            storesoup = bs4.BeautifulSoup(req.text, 'html5lib')
+            storesoup.encode('utf-8')
+        except:
+            LogE("[META] Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+            return
+
+        tempMeta = models.metaModel.copy()
+        tempMeta['supermarket'] = 'ah'
+        tempMeta['superid'] = store['no']
+        
+        try:
+            tempMeta['name'] = "{0} {1}".format(store['format'], store['street'])
+        except KeyError as e:
+            LogE("[META] Name not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['address'] = "{0} {1}, {2} {3}".format(store['street'], store['housenr'], store['zip'], store['city'])
+        except KeyError as e:
+            LogE("[META] Address not found","{0}".format(e))
+            pass
+        
+        try:        
+            tempMeta['lat'] = store['lat']
+        except KeyError as e:
+            LogE("[META] Latitude not found","{0}".format(e))
+            pass
+        
+        try:        
+            tempMeta['lon'] = store['lng']
+        except KeyError as e:
+            LogE("[META] Longitude not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['phone'] = store['phoneNumber']
+        except KeyError as e:
+            LogE("[META] Phone number not found","{0}".format(e))
+            pass
+
+        try:
+            mapping = [ ('Maandag', 'monday'), ('Dinsdag', 'tuesday'), ('Woensdag', 'wednesday'), ('Donderdag', 'thursday'), ('Vrijdag', 'friday'), ('Zaterdag', 'saturday'), ('Zondag', 'sunday') ]
+            #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
+            rows = storesoup.select('div.ah-store-openinghours tbody tr')
+
+            for row in rows:
+                day = row.select('td')[0].get_text().strip()
+                for k, v in mapping:
+                    day = day.replace(k, v)
+                tempData = {}
+                tempData['dow'] = day
+                tempData['hours'] = row.select('td')[1].get_text().strip()
+                tempMeta['opening'].append(tempData)
+        except (IndexError, KeyError) as e:
+            LogE("[META] Opening hours not found","{0}".format(e))
+            pass
+
+        try:
+            rows = storesoup.select('div.ah-store-services ul li')
+            for row in rows:
+                tempData = {}
+                tempData['service'] = row.select('h6')[0].get_text().strip()
+                tempMeta['services'].append(tempData)
+        except (IndexError, KeyError) as e:
+            LogE("[META] Services not found","{0}".format(e))
+            pass
+
+        #LogI(json.dumps(tempMeta))
+        # Need to push it to db...
 
 def test():
     #will define test here
