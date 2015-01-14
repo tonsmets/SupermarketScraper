@@ -10,11 +10,11 @@ In the second phase of this project I would like to add some postprocessing for 
 This is still a work in progress. The code you find today could be gone or heavily modified by tomorrow!
 
 Running the script is as easy as:
-```
+```bash
 python3 main.py
 ```
 To get the help function, add the -h or --help argument.
-```
+```bash
 python3 main.py -h
 ```
 
