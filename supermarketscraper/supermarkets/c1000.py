@@ -207,7 +207,7 @@ def meta():
             #crapmapping = [ ('Nog ruim 1,5 uur geopend', ''), ('Nog bijna 1,5 uur geopend',''), ('Nog ruim 1 uur geopend', ''), ('Nog ruim een uur geopend', ''), ('Nog ruim een half uur geopend', ''), ('Nog bijna een half uur geopend',''), ('Nog bijna 15 min. geopend','') ]
             #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
             tempMeta['opening'] = []
-            rows = storesoup.select('dl.opening_hours dt')
+            rows = storesoup.select('div#deze_week dl.opening_hours dt')
             tempArr = []
             for row in rows:
                 day = re.sub('<span>.*?</span>', '', str(row.contents[0])).strip()
@@ -237,7 +237,7 @@ def meta():
             pass
 
         LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
-        # db.insertMeta(tempMeta)
+        db.insertMeta(tempMeta)
         #LogI(tempMeta)
 
     seconds = (time.time() * 1000) - start_time
