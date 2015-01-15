@@ -10,11 +10,11 @@ In the second phase of this project I would like to add some postprocessing for 
 This is still a work in progress. The code you find today could be gone or heavily modified by tomorrow!
 
 Running the script is as easy as:
-```
+```bash
 python3 main.py
 ```
 To get the help function, add the -h or --help argument.
-```
+```bash
 python3 main.py -h
 ```
 
@@ -46,7 +46,7 @@ In order to run this script you need to have some dependencies installed:
 The software uses MongoDB as database supplier so you will also need to install that. 
 
 To install all needed dependencies on a debian flavoured linux distribution (tested on Ubuntu 14.04 LTS) use the following commands:
-```
+```bash
 sudo apt-get install python3 python3-pip mongodb
 sudo pip3 install beautifulsoup4 requests pymongo html5lib colorama cssutils
 ```
