@@ -16,7 +16,8 @@ def test():
 
 def run():
 	#ah.meta()
-	
+	#c1000.meta()
+
 	ah.fetch()
 	c1000.fetch()
 	coop.fetch()

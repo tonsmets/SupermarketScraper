@@ -138,7 +138,7 @@ def meta():
 
     data = json.loads(r.text)
     #print(data)
-    LogD("Aantal supermarkten: " + str(len(data['stores'])))
+    LogD("Amount of supermarkets: {0}".format(str(len(data['stores']))))
     for store in data['stores']:
         #LogI("[" + store['no'] + "] [" + store['status'] + "] " + store['format'] + " " + store['street'] + " " + store['city'])
         try:

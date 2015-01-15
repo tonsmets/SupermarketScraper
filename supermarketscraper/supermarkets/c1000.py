@@ -131,6 +131,117 @@ def fetch():
     seconds = (time.time() * 1000) - start_time
     LogI("Done fetching {0} C1000 discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
 
+def meta():
+    LogI("Fetching C1000 metadata...")
+    start_time = time.time() * 1000
+    try:
+        r = requests.get('http://www.c1000.nl/kies-uw-winkel.aspx', headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
+    try:
+        soup = bs4.BeautifulSoup(r.text, 'html5lib')
+        soup.encode('utf-8')
+    except:
+        LogE("[META] Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+        return
+
+    urls = []
+
+    storecols = soup.select('ul.stores_per_letter')
+    for col in storecols:
+        items = col.select('li ul li')
+        for item in items:
+            urls.append(item.select('a')[0].get('href').strip())
+            #print(item)
+
+    #regofobie = re.compile("(\-?\d+(\.\d+)?)\s?,\s?(\-?\d+(\.\d+)?)")
+    regofobie = re.compile("(\-?\d+(\.\d+)?)\s?,\s?(\-?\d+(\.\d+)?)")
+
+    LogD("Amount of supermarkets: {0}".format(str(len(urls))))
+    for url in urls:
+        try:
+            req = requests.get(url, headers=settings.headers)
+        except requests.exceptions.ConnectionError as ce:
+            LogE("[META] Unable to connect to supermarket detail page","{0}".format(ce))
+
+        try:
+            storesoup = bs4.BeautifulSoup(req.text, 'html5lib')
+            storesoup.encode('utf-8')
+        except:
+            LogE("[META] Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+            return
+
+        tempMeta = models.metaModel.copy()
+        tempMeta['supermarket'] = 'c1000'
+        #tempMeta['superid'] = store['no']
+        try:
+            tempMeta['name'] = storesoup.select('address a strong')[0].get_text().strip()
+        except IndexError as e:
+            LogE("[META] Name not found","{0}".format(e))
+            pass
+        
+        try:
+            tempAddr = storesoup.select('address')[0]
+            tempAddr = str(tempAddr).split('<br/>')
+            tempAddr.pop(0)
+            tempMeta['phone'] = tempAddr[2].replace('</address>','').replace('Telefoon: ','')
+            tempMeta['address'] = "{0}, {1}".format(tempAddr[0], tempAddr[1].replace(',',''))
+        except KeyError as e:
+            LogE("[META] Address not found","{0}".format(e))
+            pass
+        
+        try:    
+            tempCoords = str(storesoup.select('a.visual_holder img[src^=http://maps]')[0].get('src').strip())
+            #print(tempCoords)
+            m = regofobie.findall(tempCoords)
+            #print(m)
+            tempMeta['lat'] = m[0][0]
+            tempMeta['lon'] = m[0][2]
+        except KeyError as e:
+            LogE("[META] Latitude not found","{0}".format(e))
+            pass
+    
+        try:
+            mapping = [ ('Maandag', 'monday'), ('Dinsdag', 'tuesday'), ('Woensdag', 'wednesday'), ('Donderdag', 'thursday'), ('Vrijdag', 'friday'), ('Zaterdag', 'saturday'), ('Zondag', 'sunday') ]
+            #crapmapping = [ ('Nog ruim 1,5 uur geopend', ''), ('Nog bijna 1,5 uur geopend',''), ('Nog ruim 1 uur geopend', ''), ('Nog ruim een uur geopend', ''), ('Nog ruim een half uur geopend', ''), ('Nog bijna een half uur geopend',''), ('Nog bijna 15 min. geopend','') ]
+            #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
+            tempMeta['opening'] = []
+            rows = storesoup.select('dl.opening_hours dt')
+            tempArr = []
+            for row in rows:
+                day = re.sub('<span>.*?</span>', '', str(row.contents[0])).strip()
+                for k, v in mapping:
+                    day = day.replace(k, v)
+                hours = row.findNextSiblings("dd")[0].get_text().strip()
+                tempData = {}
+                tempData['dow'] = day
+                tempData['hours'] = hours
+                tempArr.append(tempData)
+            tempMeta['opening'] = tempArr
+        except (IndexError, KeyError) as e:
+            LogE("[META] Opening hours not found","{0}".format(e))
+            pass
+
+        try:
+            tempMeta['services'] = []
+            rows = storesoup.select('ul.tag_list li')
+            tempArr = []
+            for row in rows:
+                tempData = {}
+                tempData['service'] = row.get_text().strip()
+                tempArr.append(tempData)
+            tempMeta['services'] = tempArr
+        except (IndexError, KeyError) as e:
+            LogE("[META] Services not found","{0}".format(e))
+            pass
+
+        LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
+        # db.insertMeta(tempMeta)
+        #LogI(tempMeta)
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching C1000 metadata in {0}ms".format(format(seconds, '.2f')))
 def test():
     #will define test here
     LogI("C1000 test")
