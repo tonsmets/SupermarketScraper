@@ -129,6 +129,7 @@ def fetch():
 
 def meta():
     LogI("Fetching AH metadata...")
+    start_time = time.time() * 1000
     try:
         r = requests.get('http://www.ah.nl/data/winkelinformatie/winkels/json', headers=settings.headers)
     except requests.exceptions.ConnectionError as ce:
@@ -137,7 +138,7 @@ def meta():
 
     data = json.loads(r.text)
     #print(data)
-    LogI("Aantal supermarkten: " + str(len(data['stores'])))
+    LogD("Aantal supermarkten: " + str(len(data['stores'])))
     for store in data['stores']:
         #LogI("[" + store['no'] + "] [" + store['status'] + "] " + store['format'] + " " + store['street'] + " " + store['city'])
         try:
@@ -191,8 +192,9 @@ def meta():
         try:
             mapping = [ ('Maandag', 'monday'), ('Dinsdag', 'tuesday'), ('Woensdag', 'wednesday'), ('Donderdag', 'thursday'), ('Vrijdag', 'friday'), ('Zaterdag', 'saturday'), ('Zondag', 'sunday') ]
             #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
+            tempMeta['opening'] = []
             rows = storesoup.select('div.ah-store-openinghours tbody tr')
-
+            tempArr = []
             for row in rows:
                 day = row.select('td')[0].get_text().strip()
                 for k, v in mapping:
@@ -200,23 +202,31 @@ def meta():
                 tempData = {}
                 tempData['dow'] = day
                 tempData['hours'] = row.select('td')[1].get_text().strip()
-                tempMeta['opening'].append(tempData)
+                tempArr.append(tempData)
+            tempMeta['opening'] = tempArr
         except (IndexError, KeyError) as e:
             LogE("[META] Opening hours not found","{0}".format(e))
             pass
 
         try:
+            tempMeta['services'] = []
             rows = storesoup.select('div.ah-store-services ul li')
+            tempArr = []
             for row in rows:
                 tempData = {}
                 tempData['service'] = row.select('h6')[0].get_text().strip()
-                tempMeta['services'].append(tempData)
+                tempArr.append(tempData)
+            tempMeta['services'] = tempArr
         except (IndexError, KeyError) as e:
             LogE("[META] Services not found","{0}".format(e))
             pass
 
-        #LogI(json.dumps(tempMeta))
-        # Need to push it to db...
+        LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
+        db.insertMeta(tempMeta)
+        #LogI(tempMeta)
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching AH metadata in {0}ms".format(format(seconds, '.2f')))
 
 def test():
     #will define test here

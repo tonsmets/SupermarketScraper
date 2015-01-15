@@ -21,5 +21,5 @@ except:
 def insert(data):
 	collection.insert(data)
 
-def addMeta(data):
-	pass
+def insertMeta(data):
+	metacollection.insert(data)
