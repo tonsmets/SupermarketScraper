@@ -156,7 +156,7 @@ def meta():
             #print(item)
 
     #regofobie = re.compile("(\-?\d+(\.\d+)?)\s?,\s?(\-?\d+(\.\d+)?)")
-    regofobie = re.compile("(\-?\d+(\.\d+)?)\s?,\s?(\-?\d+(\.\d+)?)")
+    regofobie = re.compile("((\-?\d+(\.\d+)?)\s?,\s?(\-?\d+(\.\d+)?))")
 
     LogD("Amount of supermarkets: {0}".format(str(len(urls))))
     for url in urls:
@@ -196,8 +196,9 @@ def meta():
             #print(tempCoords)
             m = regofobie.findall(tempCoords)
             #print(m)
-            tempMeta['lat'] = m[0][0]
-            tempMeta['lon'] = m[0][2]
+            coords = m[0][0].split(',')
+            tempMeta['lat'] = coords[0]
+            tempMeta['lon'] = coords[1]
         except KeyError as e:
             LogE("[META] Latitude not found","{0}".format(e))
             pass
