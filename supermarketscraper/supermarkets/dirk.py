@@ -236,7 +236,7 @@ def meta():
 
         LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
         db.insertMeta(tempMeta)
-        LogI(tempMeta)
+        #LogI(tempMeta)
 
     seconds = (time.time() * 1000) - start_time
     LogI("Done fetching Dirk metadata in {0}ms".format(format(seconds, '.2f')))
