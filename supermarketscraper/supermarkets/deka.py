@@ -41,6 +41,7 @@ import re
 from util.logging import *
 import util.settings as settings
 import models.model as models
+import demjson
 
 import util.database as db
 
@@ -243,6 +244,115 @@ def getAmount(tag):
     else:
         LogE("No amount found in if-list","For tag: {0}".format(tag))
         pass
+
+def meta():
+    LogI("Fetching Deka metadata...")
+    start_time = time.time() * 1000
+    try:
+        r = requests.get('https://www.dekamarkt.nl/winkels#|0|0|', headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
+
+    try:
+        soup = bs4.BeautifulSoup(r.text, 'html5lib')
+        soup.encode('utf-8')
+    except:
+        LogE("[META] Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+        return
+
+    try:
+        origdata = soup.select('div.contentWrapper script')[0].get_text().replace(';Filialen.init(markers,types,departments);','').replace('var markers=','')
+    except IndexError as e:
+        LogE("[META] Unable to find data","{0}".format(e))
+        return
+
+    #print(data)
+    data = re.sub("(\;var\s.+\=\[\{.*\}\])","",origdata)
+    data = demjson.decode(data)
+
+    m = re.search('(var\sdepartments\=\[\{.*\}\])', origdata)
+    if m:
+        found = m.group(1).replace('var departments=','')
+        departments = json.loads(found)
+        print(departments)
+
+    LogD("Amount of supermarkets: {0}".format(str(len(data))))
+    for store in data:
+        tempMeta = models.metaModel.copy()
+        tempMeta['supermarket'] = 'deka'
+        tempMeta['superid'] = store['ID']
+        
+        try:
+            tempMeta['name'] = "Deka {0} {1}".format(store['address'].split(' ')[0], store['city'])
+        except KeyError as e:
+            LogE("[META] Name not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['address'] = "{0}, {1} {2}".format(store['address'], store['zip'], store['city'])
+        except KeyError as e:
+            LogE("[META] Address not found","{0}".format(e))
+            pass
+        
+        try:        
+            tempMeta['lat'] = store['lat']
+        except KeyError as e:
+            LogE("[META] Latitude not found","{0}".format(e))
+            pass
+        
+        try:        
+            tempMeta['lon'] = store['lng']
+        except KeyError as e:
+            LogE("[META] Longitude not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['phone'] = store['phone']
+        except KeyError as e:
+            LogE("[META] Phone number not found","{0}".format(e))
+            pass
+
+        try:
+            mapping = [ ('1', 'monday'), ('2', 'tuesday'), ('3', 'wednesday'), ('4', 'thursday'), ('5', 'friday'), ('6', 'saturday'), ('0', 'sunday') ]
+            #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
+            tempMeta['opening'] = []
+            days = store['open']
+            for day in days:
+                dow = str(day['dayOfWeek'])
+                for k, v in mapping:
+                    dow = dow.replace(k, v)
+                if '00:00' in day['open'] and '00:00' in day['close']:
+                    hours = 'Gesloten'
+                else:
+                    hours = "{0} - {1}".format(day['open'], day['close'])
+                tempMeta['opening'].append({'dow':dow, 'hours': hours})
+
+            tempMeta['opening'].pop(1)
+            
+        except (IndexError, KeyError) as e:
+            LogE("[META] Opening hours not found","{0}".format(e))
+            pass
+
+        try:
+            tempMeta['services'] = []         
+            services = store['departments']
+            for service in services:
+                name = ""
+                for i in range(0, len(departments)):
+                    if departments[i]['ID'] == service:
+                        name = departments[i]['name']
+                tempMeta['services'].append({'service':name})
+        except (IndexError, KeyError) as e:
+            LogE("[META] Services not found","{0}".format(e))
+            pass
+
+        LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
+        db.insertMeta(tempMeta)
+        #LogI(tempMeta)
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching Deka metadata in {0}ms".format(format(seconds, '.2f')))
 
 def test():
     #will define test here

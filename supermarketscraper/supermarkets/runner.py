@@ -18,6 +18,7 @@ def run():
 	#ah.meta()
 	#c1000.meta()
 	#coop.meta()
+	#deka.meta()
 
 	ah.fetch()
 	c1000.fetch()
