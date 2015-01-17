@@ -15,10 +15,11 @@ def test():
 	print("Runner")
 
 def run():
-	#ah.meta()
-	#c1000.meta()
-	#coop.meta()
-	#deka.meta()
+	# ah.meta()
+	# c1000.meta()
+	# coop.meta()
+	# deka.meta()
+	# dirk.meta()
 
 	ah.fetch()
 	c1000.fetch()

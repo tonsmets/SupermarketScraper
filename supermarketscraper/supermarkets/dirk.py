@@ -3,6 +3,7 @@ import requests
 import json
 import time
 import sys
+import re
 import traceback
 import cssutils
 from util.logging import *
@@ -133,6 +134,112 @@ def fetch():
 
     seconds = (time.time() * 1000) - start_time
     LogI("Done fetching {0} Dirk discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
+
+def meta():
+    LogI("Fetching Dirk metadata...")
+    start_time = time.time() * 1000
+    try:
+        r = requests.get('https://www.dirk.nl/winkels', headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("[META]Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
+
+    try:
+        soup = bs4.BeautifulSoup(r.text, 'html5lib')
+        soup.encode('utf-8')
+    except:
+        LogE("[META] Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+        return
+
+    stores = soup.select('div.detailBlock')
+
+    extradata = soup.select('div.wrapper.middleLong script')[0].get_text().replace('initMap(','').replace(');','')
+    extradata = json.loads(extradata)
+    #print(json.dumps(extradata))
+
+    LogD("Amount of supermarkets: {0}".format(str(len(stores))))
+
+    for store in stores:
+        tempMeta = models.metaModel.copy()
+        tempMeta['supermarket'] = 'dirk'
+        try:
+            temp = store.get('id').replace('details','')
+            #print(temp)
+            tempMeta['superid'] = temp
+        except (IndexError, KeyError) as e:
+            LogE("[META] SuperID not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['name'] = "Dirk {0}".format(store.select('div.storeName')[0].get_text().strip())
+        except (IndexError, KeyError) as e:
+            LogE("[META] Name not found","{0}".format(e))
+            pass
+        
+        try:
+            temp = "".join(str(v).strip().replace(u'\xa0', u' ') for v in store.select('div.content.adres')[0].contents)
+            temp = temp.split('<br/>')
+            tempMeta['address'] = "{0}, {1}".format(temp[0],temp[1])
+        except (IndexError, KeyError) as e:
+            LogE("[META] Address not found","{0}".format(e))
+            pass
+        
+        try:  
+            for i in range(0, len(extradata)):
+                if str(extradata[i]['ID']) == tempMeta['superid']:
+                    tempMeta['lat'] = str(extradata[i]['lat'])
+                    tempMeta['lon'] = str(extradata[i]['lng'])
+        except KeyError as e:
+            LogE("[META] Latitude or longitude not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['phone'] = store.select('div.content')[1].get_text().strip()
+        except (IndexError, KeyError) as e:
+            LogE("[META] Phone number not found","{0}".format(e))
+            pass
+
+        try:
+            mapping = [ ('1', 'monday'), ('2', 'tuesday'), ('3', 'wednesday'), ('4', 'thursday'), ('5', 'friday'), ('6', 'saturday'), ('0', 'sunday') ]
+            #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
+            tempMeta['opening'] = []
+            days = []
+            for i in range(0, len(extradata)):
+                if str(extradata[i]['ID']) == tempMeta['superid']:
+                    days = extradata[i]['open']
+            for day in days:
+                dow = str(day['dayOfWeek'])
+                for k, v in mapping:
+                    dow = dow.replace(k, v)
+                if '00:00' in day['open'] and '00:00' in day['close']:
+                    hours = 'Gesloten'
+                else:
+                    hours = "{0} - {1}".format(day['open'], day['close'])
+                tempMeta['opening'].append({'dow':dow, 'hours': hours})
+
+            tempMeta['opening'].pop(1)
+        except (IndexError, KeyError) as e:
+            LogE("[META] Opening hours not found","{0}".format(e))
+            pass
+
+        try:
+            tempMeta['services'] = []
+            temp = "".join(str(v).strip().replace(u'\xa0', u' ') for v in store.find(text=re.compile('Service')).parent.parent.select('div.content')[0].contents)
+            services = temp.split('<br/>')
+            for service in services:
+                if service is not None:
+                    tempMeta['services'].append({'service':service})
+            tempMeta['services'].pop(-1)
+        except (IndexError, KeyError) as e:
+            LogE("[META] Services not found","{0}".format(e))
+            pass
+
+        LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
+        db.insertMeta(tempMeta)
+        LogI(tempMeta)
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching Dirk metadata in {0}ms".format(format(seconds, '.2f')))
 
 def test():
     #will define test here
