@@ -20,6 +20,7 @@ def run():
 	# coop.meta()
 	# deka.meta()
 	# dirk.meta()
+	# janlinders.meta()
 
 	ah.fetch()
 	c1000.fetch()

@@ -146,6 +146,103 @@ def fetch():
     seconds = (time.time() * 1000) - start_time
     LogI("Done fetching {0} Jan Linders discounts in {1}ms. {2} errors occured and ignored.\n".format(count, format(seconds, '.2f'), totalexceptions))
 
+def meta():
+    LogI("Fetching Jan Linders metadata...")
+    start_time = time.time() * 1000
+    try:
+        r = requests.get('http://www.janlinders.nl/ajax_requests/postcode/&postcode=&plaats=', headers=settings.headers)
+    except requests.exceptions.ConnectionError as ce:
+        LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+        return
+
+    data = json.loads(r.text)
+    data.pop(0)
+    #print(data)
+    LogD("Amount of supermarkets: {0}".format(str(len(data))))
+    for store in data:
+        tempMeta = models.metaModel.copy()
+        tempMeta['supermarket'] = 'janlinders'
+        tempMeta['superid'] = store['entry_id']
+        
+        try:
+            temp = store['straat_huisnummer'].split(' ')
+            temp.pop(-1)
+            tempMeta['name'] = "Jan Linders {0} {1}".format(temp, store['plaats'])
+        except KeyError as e:
+            LogE("[META] Name not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['address'] = "{0}, {1} {2}".format(store['straat_huisnummer'], store['postcode'], store['plaats'])
+        except KeyError as e:
+            LogE("[META] Address not found","{0}".format(e))
+            pass
+        
+        try:        
+            tempMeta['lat'] = store['latitude']
+        except KeyError as e:
+            LogE("[META] Latitude not found","{0}".format(e))
+            pass
+        
+        try:        
+            tempMeta['lon'] = store['longitude']
+        except KeyError as e:
+            LogE("[META] Longitude not found","{0}".format(e))
+            pass
+        
+        try:
+            tempMeta['phone'] = store['telefoonnummer']
+        except KeyError as e:
+            LogE("[META] Phone number not found","{0}".format(e))
+            pass
+
+        try:
+            #mapping = [ ('Maandag', 'monday'), ('Dinsdag', 'tuesday'), ('Woensdag', 'wednesday'), ('Donderdag', 'thursday'), ('Vrijdag', 'friday'), ('Zaterdag', 'saturday'), ('Zondag', 'sunday') ]
+            #mapping = {'Maandag':'monday', 'Dinsdag':'tuesday', 'Woensdag':'wednesday', 'Donderdag':'thursday', 'Vrijdag':'friday', 'Zaterdag':'saturday', 'Zondag':'sunday'}
+            tempMeta['opening'] = []
+            tempMeta['opening'].append({'dow':'monday', 'hours': store['openingstijden_op_maandag']})
+            tempMeta['opening'].append({'dow':'tuesday', 'hours': store['openingstijden_op_dinsdag']})
+            tempMeta['opening'].append({'dow':'wednesday', 'hours': store['openingstijden_op_woensdag']})
+            tempMeta['opening'].append({'dow':'thursday', 'hours': store['openingstijden_op_donderdag']})
+            tempMeta['opening'].append({'dow':'friday', 'hours': store['openingstijden_op_vrijdag']})
+            tempMeta['opening'].append({'dow':'saturday', 'hours': store['openingstijden_op_zaterdag']})
+            if (store['openingstijden_op_zondag'] is None) or (store['openingstijden_op_zondag'] == ""):
+                tempMeta['opening'].append({'dow':'sunday', 'hours': 'Gesloten'})
+            else:
+                tempMeta['opening'].append({'dow':'sunday', 'hours': store['openingstijden_op_zondag']})
+        except (IndexError, KeyError) as e:
+            LogE("[META] Opening hours not found","{0}".format(e))
+            pass
+
+        try:
+            try:
+                r = requests.get('http://www.janlinders.nl/filialen/gegevens/' + store['url'], headers=settings.headers)
+            except requests.exceptions.ConnectionError as ce:
+                LogE("Failed to connect to '{0}'".format(index_url),"{0}".format(ce))
+                pass
+
+            try:
+                storesoup = bs4.BeautifulSoup(r.text, 'html5lib')
+                storesoup.encode('utf-8')
+            except:
+                LogE("Unable to parse HTML","{0}".format(sys.exc_info()[0]))
+                pass
+
+            tempMeta['services'] = []
+            rows = storesoup.find(text=re.compile('Service')).parent.parent.select('img.service_icon')
+            for service in rows:
+                tempMeta['services'].append({'service':service.get('alt')})
+        except (IndexError, KeyError) as e:
+            LogE("[META] Services not found","{0}".format(e))
+            pass
+
+        LogD('Fetched metadata for "{0}"'.format(tempMeta['name']))
+        db.insertMeta(tempMeta)
+        #LogI(tempMeta)
+
+    seconds = (time.time() * 1000) - start_time
+    LogI("Done fetching Jan Linders metadata in {0}ms".format(format(seconds, '.2f')))
+
 def test():
     #will define test here
     LogI("Jan Linders test")
