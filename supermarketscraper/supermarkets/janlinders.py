@@ -167,6 +167,7 @@ def meta():
         try:
             temp = store['straat_huisnummer'].split(' ')
             temp.pop(-1)
+            temp = ' '.join(temp)
             tempMeta['name'] = "Jan Linders {0} {1}".format(temp, store['plaats'])
         except KeyError as e:
             LogE("[META] Name not found","{0}".format(e))
