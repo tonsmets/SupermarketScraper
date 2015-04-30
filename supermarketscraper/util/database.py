@@ -1,17 +1,17 @@
 import sys
 import traceback
-import util.settings as settings
+import util.settings
 from util.logging import *
 from pymongo import *
 
 try:
-	client = MongoClient(settings.mongoUrl)
-	db = client[settings.dbname]
-	collection = db[settings.collection]
-	metacollection = db[settings.metacollection]
+	client = MongoClient(util.settings.mongoUrl)
+	db = client[util.settings.dbname]
+	collection = db[util.settings.collection]
+	metacollection = db[util.settings.metacollection]
 except:
 	e = None
-	if settings.debugging:
+	if util.settings.debugging:
 		e = traceback.format_exc()
 	else:
 		e = sys.exc_info()[0]
